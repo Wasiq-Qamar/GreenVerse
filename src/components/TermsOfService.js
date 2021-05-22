@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, ScrollView } from "react-native";
-import { Block, Text, Button } from "./";
+import { Block, Text, Button } from "./elements";
 import { theme } from "../constants";
 
 const TermsOfService = ({ showTerms, setShowTerms }) => {

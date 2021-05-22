@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet } from "react-native";
-import NavLink from "../components/NavLink";
-import { Button, Block, Input, Text } from "../components";
-import Spacer from "../components/Spacer";
+import NavLink from "./NavLink";
+import { Button, Block, Input, Text } from "./elements";
+import Spacer from "./Spacer";
 import { theme } from "../constants";
 
 const AuthForm = ({
@@ -19,7 +19,7 @@ const AuthForm = ({
   const hasErrors = () => (errorMessage ? styles.hasErrors : null);
 
   return (
-    <Block padding={[0, theme.sizes.base * 2]}>
+    <Block padding={[0, theme.sizes.base * 2]} white>
       <Text h1 bold>
         {headerText}
       </Text>

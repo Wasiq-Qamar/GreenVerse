@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 const { width, height } = Dimensions.get("window");
-import Block from "./Block";
+import { Block } from "./elements";
 import { theme } from "../constants";
 
 const Illustrations = ({ illustrations }) => {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Block, Button, Text } from "../components";
+import { Block, Button, Text } from "../components/elements";
 import Illustrations from "../components/Illustrations";
 import TermsOfService from "../components/TermsOfService";
 import { theme } from "../constants";
@@ -13,7 +13,7 @@ const WelcomeScreen = ({ navigation }) => {
   const [showTerms, setShowTerms] = useState(false);
 
   return (
-    <Block>
+    <Block white>
       <Block center bottom flex={0.4}>
         <Text h1 center bold primary>
           Green

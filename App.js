@@ -8,12 +8,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 //  SCREENS
-import AccountScreen from "./src/screens/AccountScreen";
 import SigninScreen from "./src/screens/SigninScreen";
 import SignupScreen from "./src/screens/SignupScreen";
-import TrackCreateScreen from "./src/screens/TrackCreateScreen";
-import TrackDetailScreen from "./src/screens/TrackDetailScreen";
-import TrackListScreen from "./src/screens/TrackListScreen";
+import SettingsScreen from "./src/screens/SettingsScreen";
+import VolunteerListScreen from "./src/screens/VolunteerListScreen";
 import SplashScreen from "./src/screens/SplashScreen";
 import WelcomeScreen from "./src/screens/WelcomeScreen";
 
@@ -22,68 +20,73 @@ import { Provider as AuthProvider } from "./src/context/AuthContext";
 import { Provider as LocationProvider } from "./src/context/LocationContext";
 import { Provider as TrackProvider } from "./src/context/TrackContext";
 import { Context as AuthContext } from "./src/context/AuthContext";
+import DonateListScreen from "./src/screens/DonateListScreen";
 
 //ICONS
 import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Foundation } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
-const MyTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: "#ffffff",
+const defaultNavigationOptions = {
+  headerStyle: {
+    height: theme.sizes.base * 4,
+    backgroundColor: theme.colors.white, // or 'white
+    borderBottomColor: "transparent",
+    elevation: 0, // for android
   },
-};
-
-const Track = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="TrackList"
-        component={TrackListScreen}
-        options={{ title: "Tracks" }}
-      />
-      <Stack.Screen name="TrackDetail" component={TrackDetailScreen} />
-    </Stack.Navigator>
-  );
+  headerLeftContainerStyle: {
+    alignItems: "center",
+    marginLeft: theme.sizes.base,
+    paddingRight: theme.sizes.base,
+  },
+  headerRightContainerStyle: {
+    alignItems: "center",
+    paddingRight: theme.sizes.base,
+  },
+  headerTitle: null,
+  headerBackImage: () => (
+    <Ionicons name="chevron-back" size={24} color="black" />
+  ),
 };
 
 const Home = () => {
   return (
     <BottomTab.Navigator
-      headerMode="none"
       tabBarOptions={{
-        labelStyle: { fontSize: 15 },
-        style: { minHeight: 50, maxHeight: 60 },
+        labelStyle: { fontSize: 15, paddingBottom: 10 },
+        style: { minHeight: 60, paddingTop: 10 },
+        activeTintColor: theme.colors.primary,
+        inactiveTintColor: theme.colors.gray,
       }}
     >
       <BottomTab.Screen
-        name="Track"
-        component={Track}
+        name="VolunteerList"
+        component={VolunteerListScreen}
         options={{
-          tabBarIcon: () => (
-            <FontAwesome name="th-list" size={24} color="black" />
+          tabBarIcon: ({ color }) => (
+            <Foundation name="trees" size={24} color={color} />
           ),
         }}
       />
       <BottomTab.Screen
-        name="TrackCreate"
-        component={TrackCreateScreen}
+        name="DonateList"
+        component={DonateListScreen}
         options={{
-          title: "Add Track",
-          tabBarIcon: () => <Entypo name="plus" size={24} />,
+          tabBarIcon: ({ color }) => (
+            <FontAwesome5 name="hands-helping" size={20} color={color} />
+          ),
         }}
       />
       <BottomTab.Screen
-        name="Account"
-        component={AccountScreen}
+        name="Settings"
+        component={SettingsScreen}
         options={{
-          tabBarIcon: () => (
-            <Ionicons name="settings" size={24} color="black" />
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="settings" size={24} color={color} />
           ),
         }}
       />
@@ -94,27 +97,6 @@ const Home = () => {
 function App() {
   const { tryLocalSignin, state } = useContext(AuthContext);
   let token;
-  const defaultNavigationOptions = {
-    headerStyle: {
-      height: theme.sizes.base * 4,
-      backgroundColor: theme.colors.white, // or 'white
-      borderBottomColor: "transparent",
-      elevation: 0, // for android
-    },
-    headerLeftContainerStyle: {
-      alignItems: "center",
-      marginLeft: theme.sizes.base,
-      paddingRight: theme.sizes.base,
-    },
-    headerRightContainerStyle: {
-      alignItems: "center",
-      paddingRight: theme.sizes.base,
-    },
-    headerTitle: null,
-    headerBackImage: () => (
-      <Ionicons name="chevron-back" size={24} color="black" />
-    ),
-  };
 
   useEffect(() => {
     state.isLoading = true;
@@ -134,7 +116,7 @@ function App() {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer theme={MyTheme}>
+      <NavigationContainer>
         <Stack.Navigator screenOptions={defaultNavigationOptions}>
           {state.isLoading ? (
             <Stack.Screen
@@ -145,11 +127,13 @@ function App() {
           ) : (
             <>
               {token || state.token ? (
-                <Stack.Screen
-                  name="Home"
-                  component={Home}
-                  options={{ headerShown: false }}
-                />
+                <>
+                  <Stack.Screen
+                    name="Home"
+                    component={Home}
+                    options={{ headerShown: false }}
+                  />
+                </>
               ) : (
                 <>
                   <Stack.Screen

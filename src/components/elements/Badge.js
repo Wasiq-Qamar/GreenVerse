@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet } from "react-native";
 
 import Block from "./Block";
-import { theme } from "../constants";
+import { theme } from "../../constants";
 
 export default class Badge extends Component {
   render() {
@@ -13,9 +13,9 @@ export default class Badge extends Component {
       size && {
         height: size,
         width: size,
-        borderRadius: size
+        borderRadius: size,
       },
-      style
+      style,
     ]);
 
     return (
@@ -37,6 +37,6 @@ const styles = StyleSheet.create({
   badge: {
     height: theme.sizes.base,
     width: theme.sizes.base,
-    borderRadius: theme.sizes.border
-  }
+    borderRadius: theme.sizes.border,
+  },
 });
