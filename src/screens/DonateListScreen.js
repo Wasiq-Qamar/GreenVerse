@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Dimensions,
   Image,
@@ -9,9 +9,13 @@ import {
 import { Card, Badge, Button, Block, Text } from "../components/elements";
 import { theme, mocks } from "../constants";
 const { width } = Dimensions.get("window");
+import { Context as AuthContext } from "../context/AuthContext";
 
 const DonateListScreen = ({ navigation }) => {
   const categories = mocks.donateCategories;
+  const {
+    state: { imageUri },
+  } = useContext(AuthContext);
 
   return (
     <Block white>
@@ -20,10 +24,14 @@ const DonateListScreen = ({ navigation }) => {
           Donate.
         </Text>
         <Button onPress={() => navigation.navigate("Settings")}>
-          <Image
-            source={require("../../assets/images/avatar.png")}
-            style={styles.avatar}
-          />
+          {imageUri ? (
+            <Image source={{ uri: imageUri }} style={styles.avatar} />
+          ) : (
+            <Image
+              source={require("../../assets/blank-avatar.png")}
+              style={styles.avatar}
+            />
+          )}
         </Button>
       </Block>
 
@@ -34,7 +42,7 @@ const DonateListScreen = ({ navigation }) => {
         <Block flex={false} column space="between" style={styles.categories}>
           {categories.map((category, index) => (
             <Block row space="between" key={index}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("NgosList")}>
                 <Card center middle shadow style={styles.category}>
                   <Badge margin={[0, 0, 15]} size={60}>
                     <Image source={category.image} style={styles.image} />
@@ -44,7 +52,7 @@ const DonateListScreen = ({ navigation }) => {
                   </Text>
                 </Card>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("NgosList")}>
                 <Card
                   secondary
                   center

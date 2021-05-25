@@ -14,6 +14,8 @@ import SettingsScreen from "./src/screens/SettingsScreen";
 import VolunteerListScreen from "./src/screens/VolunteerListScreen";
 import SplashScreen from "./src/screens/SplashScreen";
 import WelcomeScreen from "./src/screens/WelcomeScreen";
+import TasksListScreen from "./src/screens/TasksListScreen";
+import NgoListScreen from "./src/screens/NgoListScreen";
 
 //  CONTEXT
 import { Provider as AuthProvider } from "./src/context/AuthContext";
@@ -53,32 +55,60 @@ const defaultNavigationOptions = {
   ),
 };
 
+const TaskLists = () => {
+  return (
+    <Stack.Navigator screenOptions={defaultNavigationOptions}>
+      <Stack.Screen
+        name="VolunteerTasksList"
+        component={VolunteerListScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="TasksList" component={TasksListScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const NgoLists = () => {
+  return (
+    <Stack.Navigator screenOptions={defaultNavigationOptions}>
+      <Stack.Screen
+        name="DonateNgosList"
+        component={DonateListScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="NgosList" component={NgoListScreen} />
+    </Stack.Navigator>
+  );
+};
+
 const Home = () => {
   return (
     <BottomTab.Navigator
       tabBarOptions={{
-        labelStyle: { fontSize: 15, paddingBottom: 10 },
-        style: { minHeight: 60, paddingTop: 10 },
+        labelStyle: { fontSize: 12, paddingBottom: 10 },
+        style: { minHeight: 55, paddingTop: 10 },
         activeTintColor: theme.colors.primary,
         inactiveTintColor: theme.colors.gray,
       }}
     >
       <BottomTab.Screen
         name="VolunteerList"
-        component={VolunteerListScreen}
+        component={TaskLists}
         options={{
           tabBarIcon: ({ color }) => (
             <Foundation name="trees" size={24} color={color} />
           ),
+          title: "Volunteer",
         }}
       />
       <BottomTab.Screen
         name="DonateList"
-        component={DonateListScreen}
+        component={NgoLists}
         options={{
           tabBarIcon: ({ color }) => (
-            <FontAwesome5 name="hands-helping" size={20} color={color} />
+            <FontAwesome5 name="hands-helping" size={24} color={color} />
           ),
+          title: "Donate",
         }}
       />
       <BottomTab.Screen
@@ -124,27 +154,23 @@ function App() {
               component={SplashScreen}
               options={{ headerShown: false }}
             />
+          ) : token || state.token ? (
+            <>
+              <Stack.Screen
+                name="Home"
+                component={Home}
+                options={{ headerShown: false }}
+              />
+            </>
           ) : (
             <>
-              {token || state.token ? (
-                <>
-                  <Stack.Screen
-                    name="Home"
-                    component={Home}
-                    options={{ headerShown: false }}
-                  />
-                </>
-              ) : (
-                <>
-                  <Stack.Screen
-                    name="Welcome"
-                    component={WelcomeScreen}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen name="Signin" component={SigninScreen} />
-                  <Stack.Screen name="Signup" component={SignupScreen} />
-                </>
-              )}
+              <Stack.Screen
+                name="Welcome"
+                component={WelcomeScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="Signin" component={SigninScreen} />
+              <Stack.Screen name="Signup" component={SignupScreen} />
             </>
           )}
         </Stack.Navigator>

@@ -1,92 +1,27 @@
 import React, { useState, useContext } from "react";
-import {
-  Image,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-  Modal,
-  Alert,
-} from "react-native";
-import { Tooltip } from "react-native-elements";
-
+import { Image, StyleSheet, ScrollView, Dimensions } from "react-native";
 import { Divider, Button, Block, Text, Input } from "../components/elements";
-import { theme, mocks } from "../constants";
-import { AntDesign } from "@expo/vector-icons";
+import ImageSelecter from "../components/ImageSelecter";
+import { theme } from "../constants";
 import { SimpleLineIcons } from "@expo/vector-icons";
-
 import { Context as AuthContext } from "../context/AuthContext";
 
 const { width, height } = Dimensions.get("window");
 
 const SettingsScreen = () => {
-  const profile = mocks.profile;
-  const { signout } = useContext(AuthContext);
-  const [name, setName] = useState(profile.name);
-  const [email, setEmail] = useState(profile.email);
-  const [password, setPassword] = useState(profile.password);
+  const {
+    state: { email, imageUri, userName, userId, contact, userType },
+    signout,
+    updateInfo,
+  } = useContext(AuthContext);
+  const [newUserName, setName] = useState(userName);
+  const [newEmail, setEmail] = useState(email);
+  const [newContact, setContact] = useState(contact);
   const [changePicture, setChangePicture] = useState(false);
+  const [image, setImage] = useState(null);
 
-  const ButtonAlert = () =>
-    Alert.alert("Change Profile Picture", "Select new Image", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-      },
-      { text: "OK", onPress: () => console.log("OK Pressed") },
-    ]);
-
-  const renderModal = () => {
-    return (
-      <Modal
-        animationType="fade"
-        visible={changePicture}
-        onRequestClose={() => setChangePicture(false)}
-      >
-        <Block>
-          <Block flex={5}>
-            <Block>
-              <Image
-                source={require("../../assets/images/avatar.png")}
-                style={{ height: height, width: width }}
-              />
-            </Block>
-          </Block>
-
-          <Block bottom center flex={1}>
-            <Block row>
-              <Button
-                style={{ width: width * 0.4, marginRight: 15 }}
-                color={theme.colors.black}
-                onPress={ButtonAlert}
-              >
-                <Text bold white center>
-                  Upload Image
-                </Text>
-              </Button>
-              <Button
-                style={{ width: width * 0.4 }}
-                color={theme.colors.black}
-                onPress={ButtonAlert}
-              >
-                <Text bold white center>
-                  Remove Image
-                </Text>
-              </Button>
-            </Block>
-            <Button
-              style={{ width: width * 0.85 }}
-              onPress={() => setChangePicture(false)}
-              color={theme.colors.black}
-            >
-              <Text bold center white>
-                Done
-              </Text>
-            </Button>
-          </Block>
-        </Block>
-      </Modal>
-    );
+  const handleEdits = async () => {
+    updateInfo(newUserName, newEmail, newContact, userId);
   };
 
   return (
@@ -99,18 +34,19 @@ const SettingsScreen = () => {
         </Block>
         <Block flex={1} row space="between">
           <Button onPress={signout}>
-            <Tooltip
-              backgroundColor={theme.colors.gray2}
-              popover={<Text>Logout</Text>}
-            >
-              <SimpleLineIcons name="logout" size={24} color="black" />
-            </Tooltip>
+            <SimpleLineIcons name="logout" size={24} color="black" />
           </Button>
           <Button onPress={() => setChangePicture(true)}>
-            <Image
-              source={require("../../assets/images/avatar.png")}
-              style={styles.avatar}
-            />
+            {imageUri ? (
+              <Image source={{ uri: imageUri }} style={styles.avatar} />
+            ) : image ? (
+              <Image source={{ uri: image }} style={styles.avatar} />
+            ) : (
+              <Image
+                source={require("../../assets/blank-avatar.png")}
+                style={styles.avatar}
+              />
+            )}
           </Button>
         </Block>
       </Block>
@@ -118,11 +54,20 @@ const SettingsScreen = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <Block style={styles.inputs}>
           <Block row center space="between">
+            <Text primary>User Type:</Text>
+            <Text primary style={styles.input}>
+              {userType}
+            </Text>
+          </Block>
+        </Block>
+
+        <Block style={styles.inputs}>
+          <Block row center space="between">
             <Text primary>Username:</Text>
             <Input
-              defaultValue={name}
-              onChangeText={setName}
+              defaultValue={userName}
               style={styles.input}
+              onChangeText={setName}
             />
           </Block>
 
@@ -130,25 +75,45 @@ const SettingsScreen = () => {
             <Text primary>Email:</Text>
             <Input
               defaultValue={email}
-              onChangeText={setEmail}
               style={styles.input}
+              onChangeText={setEmail}
             />
           </Block>
 
           <Block row center space="between">
-            <Text primary>Password:</Text>
+            <Text primary>Contact:</Text>
             <Input
-              secure
-              defaultValue={password}
-              onChangeText={setPassword}
+              defaultValue={contact}
               style={[styles.input, { padding: 0 }]}
+              onChangeText={setContact}
             />
           </Block>
+
+          {newUserName !== userName ||
+          newEmail !== email ||
+          newContact !== contact ? (
+            <Block center>
+              <Button
+                style={{ width: width * 0.4 }}
+                color={theme.colors.black}
+                onPress={handleEdits}
+              >
+                <Text bold white center>
+                  Save
+                </Text>
+              </Button>
+            </Block>
+          ) : null}
         </Block>
 
         <Divider margin={[theme.sizes.base, theme.sizes.base * 2]} />
       </ScrollView>
-      {renderModal()}
+      <ImageSelecter
+        image={image}
+        setImage={setImage}
+        setChangePicture={setChangePicture}
+        changePicture={changePicture}
+      />
     </Block>
   );
 };

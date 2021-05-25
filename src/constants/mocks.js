@@ -56,36 +56,55 @@ const volunteerCategories = [
   },
 ];
 
-const products = [
+const tasks = [
   {
     id: 1,
-    name: "16 Best Plants That Thrive In Your Bedroom",
+    name: "Expressway Project",
+    location: "Islamabad, Expressway",
     description:
-      "Bedrooms deserve to be decorated with lush greenery just like every other room in the house – but it can be tricky to find a plant that thrives here. Low light, high humidity and warm temperatures mean only certain houseplants will flourish.",
-    tags: ["Interior", "27 m²", "Ideas"],
-    images: [
-      require("../../assets/images/plants_1.png"),
-      require("../../assets/images/plants_2.png"),
-      require("../../assets/images/plants_3.png"),
-      // showing only 3 images, show +6 for the rest
-      require("../../assets/images/plants_1.png"),
-      require("../../assets/images/plants_2.png"),
-      require("../../assets/images/plants_3.png"),
-      require("../../assets/images/plants_1.png"),
-      require("../../assets/images/plants_2.png"),
-      require("../../assets/images/plants_3.png"),
-    ],
+      "Need a team of five people to plant 25 trees on a patch on the expressway from karal chowk to Khanna pul.",
+    date: "25th December, 2021",
+    time: "5.30 - 7.30",
+    image: require("../../assets/icons/plant.jpg"),
+  },
+  {
+    id: 2,
+    name: "Sea View Project",
+    location: "Karachi, Seaview",
+    description:
+      "Need a team of five people to plant 25 trees on a patch on sea view boundary wall",
+    date: "13th January, 2021",
+    time: "4.00 - 6.30",
+    image: require("../../assets/images/explore_3.png"),
+  },
+  {
+    id: 3,
+    name: "Minar-e-Pakistan Project",
+    location: "Lahore, Azadi Chowk",
+    description:
+      "Need a team of five people to plant 100 trees around the border of park grass",
+    date: "16th July, 2021",
+    time: "4.00 - 6.30",
+    image: require("../../assets/images/1.png"),
   },
 ];
 
-const explore = [
-  // images
-  require("../../assets/images/explore_1.png"),
-  require("../../assets/images/explore_2.png"),
-  require("../../assets/images/explore_3.png"),
-  require("../../assets/images/explore_4.png"),
-  require("../../assets/images/explore_5.png"),
-  require("../../assets/images/explore_6.png"),
+const ngos = [
+  {
+    id: 1,
+    name: "EDHI Welfare Trust",
+    description:
+      "The Edhi Foundation is a non-profit social welfare organization based in Pakistan. It was founded by Abdul Sattar Edhi in 1951, who served as the head of the organization until his death on 8 July 2016.",
+
+    image: require("../../assets/images/edhi_icon.jpg"),
+  },
+  {
+    id: 2,
+    name: "Saylani Trust",
+    description:
+      "Saylani Welfare International Trust is a Pakistani charity focusing primarily on feeding the homeless. It was established in May 1999 and is headquartered at Bahdurabad, Karachi, Pakistan. It was founded and headed by spiritual and religious scholar Maulana Bashir Farooq Qadri.",
+    image: require("../../assets/images/saylani_icon.jpg"),
+  },
 ];
 
 const profile = {
@@ -94,4 +113,4 @@ const profile = {
   password: "password",
 };
 
-export { volunteerCategories, donateCategories, explore, products, profile };
+export { volunteerCategories, donateCategories, ngos, tasks, profile };

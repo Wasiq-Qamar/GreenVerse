@@ -9,7 +9,34 @@ const authReducer = (state, action) => {
     case "clear_is_loading":
       return { ...state, isLoading: false };
     case "signin":
-      return { errorMessage: "", token: action.payload, isLoading: false };
+      return {
+        errorMessage: "",
+        token: action.payload.token,
+        email: action.payload.email,
+        password: action.payload.password,
+        userName: action.payload.userName,
+        imageUri: action.payload.imageUri,
+        userId: action.payload.userId,
+        contact: action.payload.contact,
+        userType: action.payload.userType,
+        isLoading: false,
+      };
+    case "image_upload":
+      return {
+        ...state,
+        errorMessage: "",
+        isLoading: false,
+        imageUri: action.payload,
+      };
+    case "edit_profile":
+      return {
+        ...state,
+        errorMessage: "",
+        isLoading: false,
+        contact: action.payload.contact,
+        email: action.payload.email,
+        userName: action.payload.userName,
+      };
     case "clear_error_message":
       return { ...state, errorMessage: "" };
     case "signout":
@@ -26,14 +53,32 @@ const clearErrorMessage = (dispatch) => {
 };
 
 const clearIsLoading = (dispatch) => {
-  return () => {
+  return async () => {
     dispatch({ type: "clear_is_loading" });
   };
 };
 
 const tryLocalSignin = (dispatch) => {
-  return ({ token }) => {
-    dispatch({ type: "signin", payload: token });
+  return async ({ token }) => {
+    const email = await AsyncStorage.getItem("email");
+    const password = await AsyncStorage.getItem("password");
+    const imageUri = await AsyncStorage.getItem("imageUri");
+    const userName = await AsyncStorage.getItem("userName");
+    const userId = await AsyncStorage.getItem("userId");
+    const contact = await AsyncStorage.getItem("contact");
+    const userType = await AsyncStorage.getItem("userType");
+
+    const data = {
+      token,
+      email,
+      password,
+      userName,
+      imageUri,
+      userId,
+      contact,
+      userType,
+    };
+    dispatch({ type: "signin", payload: data });
   };
 };
 
@@ -42,12 +87,20 @@ const signup = (dispatch) => {
     try {
       const res = await trackerApi.post("/signup", { email, password });
       await AsyncStorage.setItem("token", res.data.token);
-      dispatch({ type: "signin", payload: res.data.token });
+      await AsyncStorage.setItem("userName", res.data.userName);
+      await AsyncStorage.setItem("email", res.data.email);
+      await AsyncStorage.setItem("password", res.data.password);
+      await AsyncStorage.setItem("imageUri", res.data.imageUri);
+      await AsyncStorage.setItem("userId", res.data.userId);
+      await AsyncStorage.setItem("contact", res.data.contact);
+      await AsyncStorage.setItem("userType", res.data.userType);
+      dispatch({ type: "signin", payload: res.data });
 
       if (callback) {
         callback();
       }
     } catch (err) {
+      console.log("Error Message" + err);
       dispatch({
         type: "add_error",
         payload: "Something went wrong with signup.",
@@ -61,7 +114,14 @@ const signin = (dispatch) => {
     try {
       const res = await trackerApi.post("/signin", { email, password });
       await AsyncStorage.setItem("token", res.data.token);
-      dispatch({ type: "signin", payload: res.data.token });
+      await AsyncStorage.setItem("userName", res.data.userName);
+      await AsyncStorage.setItem("email", res.data.email);
+      await AsyncStorage.setItem("password", res.data.password);
+      await AsyncStorage.setItem("imageUri", res.data.imageUri);
+      await AsyncStorage.setItem("userId", res.data.userId);
+      await AsyncStorage.setItem("contact", res.data.contact);
+      await AsyncStorage.setItem("userType", res.data.userType);
+      dispatch({ type: "signin", payload: res.data });
 
       if (callback) {
         callback();
@@ -72,6 +132,41 @@ const signin = (dispatch) => {
         type: "add_error",
         payload: "Unable to signin.",
       });
+    }
+  };
+};
+
+const uploadImage = (dispatch) => {
+  return async (image, userId) => {
+    let id = userId;
+    try {
+      const res = await trackerApi.patch(`/user/uploadImage/${id}`, {
+        image: image,
+      });
+      await AsyncStorage.setItem("imageUri", res.data.image);
+      dispatch({ type: "image_upload", payload: res.data.image });
+    } catch (err) {
+      console.log("Upload " + err);
+    }
+  };
+};
+
+const updateInfo = (dispatch) => {
+  return async (userName, email, contact, userId) => {
+    let id = userId;
+    try {
+      const res = await trackerApi.patch(`/user/${id}`, {
+        userName,
+        email,
+        contact,
+      });
+      await AsyncStorage.setItem("userName", res.data.userName);
+      await AsyncStorage.setItem("contact", res.data.contact);
+      await AsyncStorage.setItem("email", res.data.email);
+      dispatch({ type: "edit_profile", payload: res.data });
+      console.log(res.data);
+    } catch (err) {
+      console.log("Upload " + err);
     }
   };
 };
@@ -92,6 +187,19 @@ export const { Provider, Context } = createDataContext(
     clearErrorMessage,
     tryLocalSignin,
     clearIsLoading,
+    uploadImage,
+    updateInfo,
   },
-  { token: null, errorMessage: "", isLoading: true }
+  {
+    token: null,
+    name: "",
+    password: "",
+    imageUri: "",
+    userName: "",
+    userId: null,
+    contact: "",
+    errorMessage: "",
+    userType: "",
+    isLoading: true,
+  }
 );

@@ -1,14 +1,25 @@
 import React, { useContext, useEffect } from "react";
 import { Context as AuthContext } from "../context/AuthContext";
+import { Image, View } from "react-native";
+import { Block } from "../components/elements";
 
 const SplashScreen = () => {
-  const { clearIsLoading } = useContext(AuthContext);
+  const {
+    clearIsLoading,
+    state: { token },
+  } = useContext(AuthContext);
 
   useEffect(() => {
-    clearIsLoading();
-  }, []);
+    if (token) {
+      clearIsLoading();
+    }
+  }, [token]);
 
-  return null;
+  return (
+    <Block style={{ justifyContent: "center", alignItems: "center" }}>
+      <Image source={require("../../assets/splash.png")} />
+    </Block>
+  );
 };
 
 export default SplashScreen;
