@@ -16,6 +16,9 @@ import SplashScreen from "./src/screens/SplashScreen";
 import WelcomeScreen from "./src/screens/WelcomeScreen";
 import TasksListScreen from "./src/screens/TasksListScreen";
 import NgoListScreen from "./src/screens/NgoListScreen";
+import TaskCreateScreen from "./src/screens/TaskCreateScreen";
+import DonationScreen from "./src/screens/DonationScreen";
+import ConfirmDonationScreen from "./src/screens/ConfirmDonationScreen";
 
 //  CONTEXT
 import { Provider as AuthProvider } from "./src/context/AuthContext";
@@ -64,6 +67,7 @@ const TaskLists = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="TasksList" component={TasksListScreen} />
+      <Stack.Screen name="TaskCreate" component={TaskCreateScreen} />
     </Stack.Navigator>
   );
 };
@@ -77,6 +81,8 @@ const NgoLists = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="NgosList" component={NgoListScreen} />
+      <Stack.Screen name="Donate" component={DonationScreen} />
+      <Stack.Screen name="ConfirmDonation" component={ConfirmDonationScreen} />
     </Stack.Navigator>
   );
 };

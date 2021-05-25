@@ -6,15 +6,18 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import { FAB } from "react-native-elements";
+
 import { Card, Badge, Button, Block, Text } from "../components/elements";
 import { theme, mocks } from "../constants";
 const { width } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
+import { AntDesign } from "@expo/vector-icons";
 
 const VolunteerListScreen = ({ navigation }) => {
   const categories = mocks.volunteerCategories;
   const {
-    state: { imageUri },
+    state: { imageUri, userType },
   } = useContext(AuthContext);
 
   return (
@@ -72,6 +75,20 @@ const VolunteerListScreen = ({ navigation }) => {
             </Block>
           ))}
         </Block>
+        {userType === "User" ? (
+          <Block
+            bottom
+            flex={1}
+            style={{ alignItems: "flex-end" }}
+            padding={[0, width * 0.05]}
+          >
+            <FAB
+              color={theme.colors.primary}
+              icon={<AntDesign name="plus" size={24} color="white" />}
+              onPress={() => navigation.navigate("TaskCreate")}
+            />
+          </Block>
+        ) : null}
       </ScrollView>
     </Block>
   );

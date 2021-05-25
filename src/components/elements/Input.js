@@ -66,7 +66,17 @@ export default class Input extends Component {
   }
 
   render() {
-    const { email, phone, number, secure, error, style, ...props } = this.props;
+    const {
+      email,
+      phone,
+      number,
+      secure,
+      error,
+      multiline,
+      numberOfLines,
+      style,
+      ...props
+    } = this.props;
 
     const { toggleSecure } = this.state;
     const isSecure = toggleSecure ? false : secure;
@@ -85,6 +95,8 @@ export default class Input extends Component {
       ? "phone-pad"
       : "default";
 
+    const multi = multiline ? true : false;
+
     return (
       <Block flex={false} margin={[theme.sizes.base, 0]}>
         {this.renderLabel()}
@@ -95,6 +107,8 @@ export default class Input extends Component {
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType={inputType}
+          multiline={multi}
+          numberOfLines={numberOfLines}
           {...props}
         />
         {this.renderToggle()}

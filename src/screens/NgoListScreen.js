@@ -67,6 +67,9 @@ const NgoListScreen = ({ navigation }) => {
                     style={{ width: width * 0.3 }}
                     color={theme.colors.accent}
                     right
+                    onPress={() =>
+                      navigation.navigate("Donate", { name: ngo.name })
+                    }
                   >
                     <Text bold white center>
                       Donate

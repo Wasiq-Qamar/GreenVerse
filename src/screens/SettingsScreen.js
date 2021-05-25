@@ -95,7 +95,7 @@ const SettingsScreen = () => {
             <Block center>
               <Button
                 style={{ width: width * 0.4 }}
-                color={theme.colors.black}
+                color={theme.colors.primary}
                 onPress={handleEdits}
               >
                 <Text bold white center>
