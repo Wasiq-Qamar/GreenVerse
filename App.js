@@ -38,9 +38,9 @@ const BottomTab = createBottomTabNavigator();
 const defaultNavigationOptions = {
   headerStyle: {
     height: theme.sizes.base * 4,
-    backgroundColor: theme.colors.white, // or 'white
+    backgroundColor: theme.colors.white,
     borderBottomColor: "transparent",
-    elevation: 0, // for android
+    elevation: 0,
   },
   headerLeftContainerStyle: {
     alignItems: "center",
