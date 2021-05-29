@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import createDataContext from "./createDataContext";
-import trackerApi from "../api/tracker";
+import greenverseApi from "../api/greenverse";
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -85,7 +85,7 @@ const tryLocalSignin = (dispatch) => {
 const signup = (dispatch) => {
   return async ({ email, password }, callback) => {
     try {
-      const res = await trackerApi.post("/signup", { email, password });
+      const res = await greenverseApi.post("/signup", { email, password });
       await AsyncStorage.setItem("token", res.data.token);
       await AsyncStorage.setItem("userName", res.data.userName);
       await AsyncStorage.setItem("email", res.data.email);
@@ -112,7 +112,7 @@ const signup = (dispatch) => {
 const signin = (dispatch) => {
   return async ({ email, password }, callback) => {
     try {
-      const res = await trackerApi.post("/signin", { email, password });
+      const res = await greenverseApi.post("/signin", { email, password });
       await AsyncStorage.setItem("token", res.data.token);
       await AsyncStorage.setItem("userName", res.data.userName);
       await AsyncStorage.setItem("email", res.data.email);
@@ -140,7 +140,7 @@ const uploadImage = (dispatch) => {
   return async (image, userId) => {
     let id = userId;
     try {
-      const res = await trackerApi.patch(`/user/uploadImage/${id}`, {
+      const res = await greenverseApi.patch(`/user/uploadImage/${id}`, {
         image: image,
       });
       await AsyncStorage.setItem("imageUri", res.data.image);
@@ -155,7 +155,7 @@ const updateInfo = (dispatch) => {
   return async (userName, email, contact, userId) => {
     let id = userId;
     try {
-      const res = await trackerApi.patch(`/user/${id}`, {
+      const res = await greenverseApi.patch(`/user/${id}`, {
         userName,
         email,
         contact,

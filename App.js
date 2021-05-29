@@ -19,16 +19,15 @@ import NgoListScreen from "./src/screens/NgoListScreen";
 import TaskCreateScreen from "./src/screens/TaskCreateScreen";
 import DonationScreen from "./src/screens/DonationScreen";
 import ConfirmDonationScreen from "./src/screens/ConfirmDonationScreen";
+import DonateListScreen from "./src/screens/DonateListScreen";
+import TaskDetailsScreen from "./src/screens/TaskDetailsScreen";
 
 //  CONTEXT
 import { Provider as AuthProvider } from "./src/context/AuthContext";
-import { Provider as LocationProvider } from "./src/context/LocationContext";
-import { Provider as TrackProvider } from "./src/context/TrackContext";
+import { Provider as TaskProvider } from "./src/context/TaskContext";
 import { Context as AuthContext } from "./src/context/AuthContext";
-import DonateListScreen from "./src/screens/DonateListScreen";
 
 //ICONS
-import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
@@ -67,6 +66,7 @@ const TaskLists = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="TasksList" component={TasksListScreen} />
+      <Stack.Screen name="TaskDetails" component={TaskDetailsScreen} />
       <Stack.Screen name="TaskCreate" component={TaskCreateScreen} />
     </Stack.Navigator>
   );
@@ -135,7 +135,6 @@ function App() {
   let token;
 
   useEffect(() => {
-    state.isLoading = true;
     const localSignin = async () => {
       try {
         token = await AsyncStorage.getItem("token");
@@ -187,12 +186,10 @@ function App() {
 
 export default () => {
   return (
-    <TrackProvider>
-      <LocationProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </LocationProvider>
-    </TrackProvider>
+    <TaskProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </TaskProvider>
   );
 };

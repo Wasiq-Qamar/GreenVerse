@@ -46,7 +46,9 @@ const VolunteerListScreen = ({ navigation }) => {
           {categories.map((category, index) => (
             <Block row space="between" key={index}>
               <TouchableOpacity
-                onPress={() => navigation.navigate("TasksList")}
+                onPress={() =>
+                  navigation.navigate("TasksList", { type: category.name })
+                }
               >
                 <Card center middle shadow style={styles.category}>
                   <Badge margin={[0, 0, 15]} size={60}>
@@ -58,7 +60,9 @@ const VolunteerListScreen = ({ navigation }) => {
                 </Card>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => navigation.navigate("TasksList")}
+                onPress={() =>
+                  navigation.navigate("TasksList", { type: category.name })
+                }
               >
                 <Card
                   secondary
@@ -75,7 +79,7 @@ const VolunteerListScreen = ({ navigation }) => {
             </Block>
           ))}
         </Block>
-        {userType === "User" ? (
+        {userType === "Manager" ? (
           <Block
             bottom
             flex={1}
