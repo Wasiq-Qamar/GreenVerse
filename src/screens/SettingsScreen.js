@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Image, StyleSheet, ScrollView, Dimensions } from "react-native";
 import { Divider, Button, Block, Text, Input } from "../components/elements";
+import Spacer from "../components/Spacer";
 import ImageSelecter from "../components/ImageSelecter";
 import { theme } from "../constants";
 import { SimpleLineIcons } from "@expo/vector-icons";
@@ -10,7 +11,15 @@ const { width, height } = Dimensions.get("window");
 
 const SettingsScreen = () => {
   const {
-    state: { email, imageUri, userName, userId, contact, userType },
+    state: {
+      email,
+      imageUri,
+      userName,
+      userId,
+      contact,
+      userType,
+      errorMessage,
+    },
     signout,
     updateInfo,
   } = useContext(AuthContext);
@@ -39,8 +48,6 @@ const SettingsScreen = () => {
           <Button onPress={() => setChangePicture(true)}>
             {imageUri ? (
               <Image source={{ uri: imageUri }} style={styles.avatar} />
-            ) : image ? (
-              <Image source={{ uri: image }} style={styles.avatar} />
             ) : (
               <Image
                 source={require("../../assets/blank-avatar.png")}
@@ -88,6 +95,12 @@ const SettingsScreen = () => {
               onChangeText={setContact}
             />
           </Block>
+
+          {errorMessage ? (
+            <Spacer>
+              <Text style={styles.error}>{errorMessage}</Text>
+            </Spacer>
+          ) : null}
 
           {newUserName !== userName ||
           newEmail !== email ||
@@ -152,5 +165,9 @@ const styles = StyleSheet.create({
   },
   toggles: {
     paddingHorizontal: theme.sizes.base * 2,
+  },
+  error: {
+    color: "red",
+    textAlign: "center",
   },
 });

@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from "react";
-import { Image, Dimensions, Modal, Alert } from "react-native";
+import { Image, Dimensions, Modal, Alert, StyleSheet } from "react-native";
 import { Button, Block, Text } from "../components/elements";
 import { theme } from "../constants";
 
 import * as ImagePicker from "expo-image-picker";
 import { Context as AuthContext } from "../context/AuthContext";
+// import { styles } from "./elements/Block";
 const { width, height } = Dimensions.get("window");
 
 const ImageSelecter = ({
@@ -31,9 +32,8 @@ const ImageSelecter = ({
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
     });
 
@@ -69,7 +69,7 @@ const ImageSelecter = ({
   };
 
   const ButtonAlert = () =>
-    Alert.alert("Change Profile Picture", "Select new Image", [
+    Alert.alert("Remove Profile Picture", " Image Removed", [
       {
         text: "Cancel",
         onPress: () => console.log("Cancel Pressed"),
@@ -84,18 +84,17 @@ const ImageSelecter = ({
       visible={changePicture}
       onRequestClose={() => setChangePicture(false)}
     >
-      <Block>
+      <Block style={{ backgroundColor: theme.colors.white }}>
         <Block flex={5}>
-          <Block center middle style={{ borderWidth: 2 }}>
+          <Block center middle style={styles.imageContainer}>
             {imageUri !== "" ? (
               <Image
                 source={{ uri: imageUri }}
-                style={{ maxHeight: height * 0.6, maxWidth: width }}
-              />
-            ) : image !== "" ? (
-              <Image
-                source={{ uri: image }}
-                style={{ maxHeight: height * 0.6, maxWidth: width }}
+                style={{
+                  height: height * 0.6,
+                  width: width,
+                  resizeMode: "contain",
+                }}
               />
             ) : (
               <Image
@@ -110,7 +109,7 @@ const ImageSelecter = ({
           <Block row>
             <Button
               style={{ width: width * 0.4, marginRight: 15 }}
-              color={theme.colors.black}
+              color={theme.colors.primary}
               onPress={pickImage}
             >
               <Text bold white center>
@@ -119,8 +118,8 @@ const ImageSelecter = ({
             </Button>
             <Button
               style={{ width: width * 0.4 }}
-              color={theme.colors.black}
-              onPress={ButtonAlert}
+              color="#8B0000"
+              onPress={() => uploadImage("", userId)}
             >
               <Text bold white center>
                 Remove Image
@@ -130,7 +129,7 @@ const ImageSelecter = ({
           <Button
             style={{ width: width * 0.85 }}
             onPress={() => setChangePicture(false)}
-            color={theme.colors.black}
+            gradient
           >
             <Text bold center white>
               Done
@@ -141,5 +140,13 @@ const ImageSelecter = ({
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  imageContainer: {
+    borderWidth: 2,
+    margin: 10,
+    overflow: "hidden",
+  },
+});
 
 export default ImageSelecter;

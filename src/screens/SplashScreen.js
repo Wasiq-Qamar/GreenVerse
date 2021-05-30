@@ -16,7 +16,13 @@ const SplashScreen = () => {
   }, [token]);
 
   return (
-    <Block style={{ justifyContent: "center", alignItems: "center" }}>
+    <Block
+      style={{
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#f8f8f8",
+      }}
+    >
       <Image source={require("../../assets/splash.png")} />
     </Block>
   );

@@ -13,6 +13,22 @@ router.post("/signup", async (req, res) => {
   const contact = "";
   const userType = "User";
 
+  if (!email || !password) {
+    return res.status(422).json({ error: "Must provide email and password" });
+  }
+
+  const regEx =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!email.match(regEx)) {
+    return res.status(422).json({ error: "Must provide valid email" });
+  }
+
+  if (password.length < 8) {
+    return res
+      .status(422)
+      .json({ error: "Password must contain atleast 8 characters" });
+  }
+
   try {
     const user = new User({
       userName,
@@ -36,7 +52,8 @@ router.post("/signup", async (req, res) => {
       userType: userType,
     });
   } catch (err) {
-    return res.status(422).send(err.message);
+    console.log(err);
+    return res.status(422).json({ error: err.message });
   }
 });
 
@@ -44,12 +61,12 @@ router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(422).send({ error: "Must provide email and password" });
+    return res.status(422).json({ error: "Must provide email and password" });
   }
 
   const user = await User.findOne({ email });
   if (!user) {
-    return res.status(422).send({ error: "Invalid password or email" });
+    return res.status(422).json({ error: "Invalid password or email" });
   }
 
   try {
@@ -66,7 +83,7 @@ router.post("/signin", async (req, res) => {
       userType: user.userType,
     });
   } catch (err) {
-    return res.status(422).send({ error: "Invalid password or email" });
+    return res.status(422).json({ error: "Invalid password or email" });
   }
 });
 
@@ -91,13 +108,22 @@ router.post("/signin", async (req, res) => {
 router.patch("/user/:id", async (req, res) => {
   const id = req.params.id;
   const updates = req.body;
-  console.log(updates);
+
+  const regEx =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!updates.email.match(regEx)) {
+    return res.status(402).json({ error: "Invalid Email" });
+  }
+
+  if (updates.contact.length !== 11 && updates.contact.length > 0) {
+    return res.status(402).json({ error: "Invalid Contact Number" });
+  }
 
   try {
     const result = await User.findByIdAndUpdate(id, updates, { new: true });
     res.send(result);
   } catch (err) {
-    return res.status(422).send(err.message);
+    return res.status(422).json({ error: err.message });
   }
 });
 

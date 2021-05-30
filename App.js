@@ -131,7 +131,7 @@ const Home = () => {
 };
 
 function App() {
-  const { tryLocalSignin, state } = useContext(AuthContext);
+  const { clearIsLoading, tryLocalSignin, state } = useContext(AuthContext);
   let token;
 
   useEffect(() => {
@@ -140,6 +140,8 @@ function App() {
         token = await AsyncStorage.getItem("token");
         if (token) {
           tryLocalSignin({ token });
+        } else {
+          clearIsLoading();
         }
       } catch (err) {
         console.log(err);

@@ -100,10 +100,9 @@ const signup = (dispatch) => {
         callback();
       }
     } catch (err) {
-      console.log("Error Message" + err);
       dispatch({
         type: "add_error",
-        payload: "Something went wrong with signup.",
+        payload: err.response.data.error,
       });
     }
   };
@@ -127,10 +126,9 @@ const signin = (dispatch) => {
         callback();
       }
     } catch (err) {
-      console.log(err);
       dispatch({
         type: "add_error",
-        payload: "Unable to signin.",
+        payload: err.response.data.error,
       });
     }
   };
@@ -160,13 +158,21 @@ const updateInfo = (dispatch) => {
         email,
         contact,
       });
-      await AsyncStorage.setItem("userName", res.data.userName);
+      if (userName) {
+        await AsyncStorage.setItem("userName", res.data.userName);
+      }
       await AsyncStorage.setItem("contact", res.data.contact);
-      await AsyncStorage.setItem("email", res.data.email);
+      if (contact) {
+        await AsyncStorage.setItem("email", res.data.email);
+      }
       dispatch({ type: "edit_profile", payload: res.data });
       console.log(res.data);
     } catch (err) {
       console.log("Upload " + err);
+      dispatch({
+        type: "add_error",
+        payload: err.response.data.error,
+      });
     }
   };
 };
