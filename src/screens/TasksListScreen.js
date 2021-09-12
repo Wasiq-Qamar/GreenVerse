@@ -25,7 +25,8 @@ const TasksListScreen = ({ route, navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       if (type === "Plant Trees") setTypeToShow("treePlantation");
-      else setTypeToShow("garbageRecycling");
+      else if (type === "Recycle") setTypeToShow("garbageRecycling");
+      else setTypeToShow(type);
       fetchTasks();
     }, [])
   );

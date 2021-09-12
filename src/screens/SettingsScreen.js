@@ -1,6 +1,19 @@
 import React, { useState, useContext } from "react";
-import { Image, StyleSheet, ScrollView, Dimensions } from "react-native";
-import { Divider, Button, Block, Text, Input } from "../components/elements";
+import {
+  Image,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
+import {
+  Divider,
+  Button,
+  Block,
+  Text,
+  Input,
+  LinkContainer,
+} from "../components/elements";
 import Spacer from "../components/Spacer";
 import ImageSelecter from "../components/ImageSelecter";
 import { theme } from "../constants";
@@ -38,7 +51,7 @@ const SettingsScreen = () => {
       <Block flex={false} row center space="between" style={styles.header}>
         <Block flex={3}>
           <Text h1 bold primary>
-            Settings.
+            Settings
           </Text>
         </Block>
         <Block flex={1} row space="between">
@@ -119,8 +132,15 @@ const SettingsScreen = () => {
           ) : null}
         </Block>
 
-        <Divider margin={[theme.sizes.base, theme.sizes.base * 2]} />
+        <Divider margin={[theme.sizes.base * 0.5, theme.sizes.base * 2]} />
+
+        <Block>
+          <LinkContainer text="Ongoing Tasks" />
+          <LinkContainer text="Completed Tasks" />
+          <LinkContainer text="Manage Donations" />
+        </Block>
       </ScrollView>
+
       <ImageSelecter
         image={image}
         setImage={setImage}
@@ -151,6 +171,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     overflow: "scroll",
   },
+
   sliders: {
     marginTop: theme.sizes.base * 0.7,
     paddingHorizontal: theme.sizes.base * 2,

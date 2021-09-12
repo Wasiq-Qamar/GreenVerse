@@ -7,5 +7,17 @@ import Text from "./Text";
 import Progress from "./Progress";
 import Divider from "./Divider";
 import Switch from "./Switch";
+import LinkContainer from "./LinkContainer";
 
-export { Block, Badge, Button, Card, Input, Text, Progress, Divider, Switch };
+export {
+  Block,
+  Badge,
+  Button,
+  Card,
+  Input,
+  Text,
+  Progress,
+  Divider,
+  Switch,
+  LinkContainer,
+};

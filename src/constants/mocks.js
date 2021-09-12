@@ -38,7 +38,7 @@ const volunteerCategories = [
   },
   {
     id: 2,
-    name: "Recycle ",
+    name: "Recycle",
     tags: ["products", "shop"],
     count: 16,
     description:

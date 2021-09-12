@@ -1,10 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Dimensions,
   Image,
   StyleSheet,
   Platform,
   ScrollView,
+  LogBox,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -37,6 +38,10 @@ const VolunteerListScreen = ({ navigation }) => {
     state: { imageUri, name },
   } = useContext(AuthContext);
   const { createTask } = useContext(TaskContext);
+
+  useEffect(() => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+  }, []);
 
   const onChange = (event, selected) => {
     if (mode === "date") {
@@ -292,7 +297,7 @@ const VolunteerListScreen = ({ navigation }) => {
                       toTime: toTime.toLocaleTimeString(),
                       date: date.toLocaleDateString(),
                     },
-                    () => navigation.navigate("TasksList")
+                    () => navigation.navigate("TasksList", { type: campaign })
                   )
                 }
               >

@@ -128,7 +128,7 @@ const signin = (dispatch) => {
     } catch (err) {
       dispatch({
         type: "add_error",
-        payload: err.response.data.error,
+        payload: "Invalid Email or Password",
       });
     }
   };

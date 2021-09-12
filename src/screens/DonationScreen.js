@@ -135,9 +135,9 @@ const VolunteerListScreen = ({ route, navigation }) => {
               </Block>
               <Block flex={3.5}>
                 <Input
-                  defaultValue={cardNumber}
+                  defaultValue={cardExpiry}
                   style={[styles.input, { width: width * 0.3 }]}
-                  onChangeText={setCardNumber}
+                  onChangeText={setCardExpiry}
                   placeholder=" Card Expiry Date"
                   number
                 />
@@ -150,9 +150,9 @@ const VolunteerListScreen = ({ route, navigation }) => {
               </Block>
               <Block flex={2.5}>
                 <Input
-                  defaultValue={cardNumber}
+                  defaultValue={cardCvv}
                   style={[styles.input, { width: width * 0.24 }]}
-                  onChangeText={setCardNumber}
+                  onChangeText={setCardCvv}
                   placeholder=" CVV Code"
                   number
                 />

@@ -50,11 +50,19 @@ const AuthForm = ({
           </Text>
         </Button>
 
-        <Button>
-          <Text gray caption center style={{ textDecorationLine: "underline" }}>
-            Forgot your password?
-          </Text>
-        </Button>
+        {submitButtonText === "Signin" ? (
+          <Button>
+            <Text
+              gray
+              caption
+              center
+              style={{ textDecorationLine: "underline" }}
+            >
+              Forgot your password?
+            </Text>
+          </Button>
+        ) : null}
+
         <NavLink text={navText} routeName={navRoute} />
       </Block>
     </Block>
