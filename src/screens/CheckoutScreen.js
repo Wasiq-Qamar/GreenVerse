@@ -27,15 +27,17 @@ import { Context as AuthContext } from "../context/AuthContext";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const DonationScreen = ({ route, navigation }) => {
+const CheckoutScreen = ({ route, navigation }) => {
   const today = new Date(Date.now());
-  const [amount, setAmount] = useState("");
   const [method, setMethod] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [cardExpiry, setCardExpiry] = useState();
   const [cardCvv, setCardCvv] = useState();
-  const [anonymous, setAnonymous] = useState(false);
-  const { name } = route.params;
+  const [name, setName] = useState();
+  const [address, setAddress] = useState();
+  const [zipcode, setZipcode] = useState();
+  const [city, setCity] = useState();
+  const { amount } = route.params;
   const {
     state: { imageUri },
   } = useContext(AuthContext);
@@ -43,7 +45,7 @@ const DonationScreen = ({ route, navigation }) => {
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
         <Text primary h1 bold style={{ width: width * 0.5 }}>
-          New Donation
+          Checkout
         </Text>
         <Button onPress={() => navigation.navigate("Settings")}>
           {imageUri ? (
@@ -57,20 +59,16 @@ const DonationScreen = ({ route, navigation }) => {
         </Button>
       </Block>
       <Block flex={false} column style={styles.form}>
-        <Block flex={false} row center space="between">
+        <Block flex={false} row center space="between" margin={[0, 0, 10, 0]}>
           <Block flex={1.5}>
             <Text left primary>
               Amount:
             </Text>
           </Block>
           <Block flex={7}>
-            <Input
-              defaultValue={amount}
-              style={[styles.input]}
-              onChangeText={setAmount}
-              placeholder="Donation Amount"
-              number
-            />
+            <Text h3 bold primary>
+              {amount}
+            </Text>
           </Block>
         </Block>
 
@@ -182,36 +180,71 @@ const DonationScreen = ({ route, navigation }) => {
 
         <Block flex={false} left>
           <Text h2 primary bold>
-            Donate To
+            Delivery Details
           </Text>
         </Block>
 
         <Spacer>
-          <Block row flex={false} left>
-            <Block flex={2}>
-              <Text primary bold>
-                Organization:
+          <Block flex={false} row center space="between">
+            <Block flex={1.5}>
+              <Text left primary>
+                Full Name:
               </Text>
             </Block>
-            <Block flex={6}>
-              <Text style={{ width: width * 0.6 }} primary>
-                {name}
-              </Text>
-            </Block>
-          </Block>
-        </Spacer>
-        <Spacer>
-          <Block row flex={false} left>
-            <Block center flex={2}>
-              <Switch
-                value={anonymous}
-                onValueChange={() => setAnonymous(!anonymous)}
+            <Block flex={7}>
+              <Input
+                defaultValue={name}
+                style={styles.input}
+                onChangeText={setName}
+                placeholder="Enter Full Name"
               />
             </Block>
-            <Block flex={6}>
-              <Text primary bold>
-                Send as an anonymous donor
+          </Block>
+
+          <Block flex={false} row center space="between">
+            <Block flex={1.5}>
+              <Text left primary>
+                Address:
               </Text>
+            </Block>
+            <Block flex={7}>
+              <Input
+                defaultValue={address}
+                style={styles.input}
+                onChangeText={setAddress}
+                placeholder="Enter Complete Address"
+              />
+            </Block>
+          </Block>
+
+          <Block flex={false} row center space="between">
+            <Block flex={1.5}>
+              <Text left primary>
+                Zipcode:
+              </Text>
+            </Block>
+            <Block flex={3.5}>
+              <Input
+                defaultValue={zipcode}
+                style={[styles.input, { width: width * 0.3 }]}
+                onChangeText={setZipcode}
+                placeholder="Enter Zipcode"
+                number
+              />
+            </Block>
+
+            <Block flex={1}>
+              <Text left primary>
+                City:
+              </Text>
+            </Block>
+            <Block flex={2.5}>
+              <Input
+                defaultValue={city}
+                style={[styles.input, { width: width * 0.24 }]}
+                onChangeText={setCity}
+                placeholder="Enter City"
+              />
             </Block>
           </Block>
         </Spacer>
@@ -222,17 +255,19 @@ const DonationScreen = ({ route, navigation }) => {
               style={{ width: width * 0.4 }}
               color={theme.colors.primary}
               onPress={() =>
-                navigation.navigate("ConfirmDonation", {
+                navigation.navigate("ConfirmCheckout", {
                   amount,
                   method,
                   cardNumber,
                   name,
-                  anonymous,
+                  address,
+                  zipcode,
+                  city,
                 })
               }
             >
               <Text h3 center white bold>
-                Donate
+                Proceed to Checkout
               </Text>
             </Button>
           </Block>
@@ -263,4 +298,4 @@ const styles = StyleSheet.create({
   },
   image: { width: 35, height: 35, borderRadius: 50 },
 });
-export default DonationScreen;
+export default CheckoutScreen;

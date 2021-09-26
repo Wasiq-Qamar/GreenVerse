@@ -13,7 +13,7 @@ const SplashScreen = () => {
     if (token) {
       clearIsLoading();
     }
-  }, [token]);
+  }, []);
 
   return (
     <Block

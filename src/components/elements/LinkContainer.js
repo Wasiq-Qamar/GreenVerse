@@ -8,23 +8,19 @@ import { theme } from "../../constants";
 
 const { width } = Dimensions.get("window");
 
-const LinkContainer = (props) => {
+const LinkContainer = ({ text, routeName }) => {
   const navigation = useNavigation();
-  const { text, routeName } = props;
   return (
-    <Card
-      row
-      center
-      space="between"
-      onPress={() => navigation.navigate(routeName)}
-      style={styles.linkCard}
-    >
-      <TouchableOpacity style={{ width: width * 0.7 }}>
+    <Card row center space="between" style={styles.linkCard}>
+      <TouchableOpacity
+        style={{ width: width * 0.7 }}
+        onPress={() => navigation.navigate(routeName)}
+      >
         <Text h3 bold>
           {text}
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate(routeName)}>
         <FontAwesome5 name="greater-than" size={10} color="black" />
       </TouchableOpacity>
     </Card>

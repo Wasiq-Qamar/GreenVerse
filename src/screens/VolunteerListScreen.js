@@ -26,16 +26,30 @@ const VolunteerListScreen = ({ navigation }) => {
         <Text primary h1 bold>
           Volunteer.
         </Text>
-        <Button onPress={() => navigation.navigate("Settings")}>
-          {imageUri ? (
-            <Image source={{ uri: imageUri }} style={styles.avatar} />
-          ) : (
-            <Image
-              source={require("../../assets/blank-avatar.png")}
-              style={styles.avatar}
-            />
+        <Block flex={false} row>
+          {userType !== "Manager" ? null : (
+            <Button
+              style={{ marginRight: 15 }}
+              onPress={() => navigation.navigate("Store")}
+            >
+              <AntDesign
+                name="shoppingcart"
+                size={30}
+                color={theme.colors.primary}
+              />
+            </Button>
           )}
-        </Button>
+          <Button onPress={() => navigation.navigate("Settings")}>
+            {imageUri ? (
+              <Image source={{ uri: imageUri }} style={styles.avatar} />
+            ) : (
+              <Image
+                source={require("../../assets/blank-avatar.png")}
+                style={styles.avatar}
+              />
+            )}
+          </Button>
+        </Block>
       </Block>
 
       <ScrollView

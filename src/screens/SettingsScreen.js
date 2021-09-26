@@ -18,11 +18,12 @@ import Spacer from "../components/Spacer";
 import ImageSelecter from "../components/ImageSelecter";
 import { theme } from "../constants";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { Context as AuthContext } from "../context/AuthContext";
 
 const { width, height } = Dimensions.get("window");
 
-const SettingsScreen = () => {
+const SettingsScreen = ({ navigation }) => {
   const {
     state: {
       email,
@@ -48,16 +49,25 @@ const SettingsScreen = () => {
 
   return (
     <Block white paddingTop={50}>
-      <Block flex={false} row center space="between" style={styles.header}>
-        <Block flex={3}>
+      <Block flex={false} row center style={styles.header}>
+        <Block flex={2.5}>
           <Text h1 bold primary>
             Settings
           </Text>
         </Block>
-        <Block flex={1} row space="between">
-          <Button onPress={signout}>
+        <Block flex={1.5} row>
+          <Button onPress={signout} style={{ marginRight: 15 }}>
             <SimpleLineIcons name="logout" size={24} color="black" />
           </Button>
+          {userType !== "Manager" ? null : (
+            <Button style={{ marginRight: 15 }}>
+              <AntDesign
+                name="shoppingcart"
+                size={30}
+                color={theme.colors.primary}
+              />
+            </Button>
+          )}
           <Button onPress={() => setChangePicture(true)}>
             {imageUri ? (
               <Image source={{ uri: imageUri }} style={styles.avatar} />
@@ -135,9 +145,8 @@ const SettingsScreen = () => {
         <Divider margin={[theme.sizes.base * 0.5, theme.sizes.base * 2]} />
 
         <Block>
-          <LinkContainer text="Ongoing Tasks" />
-          <LinkContainer text="Completed Tasks" />
-          <LinkContainer text="Manage Donations" />
+          <LinkContainer text="Manage Tasks" routeName="MyTasks" />
+          <LinkContainer text="Manage Donations" routeName="MyDonations" />
         </Block>
       </ScrollView>
 

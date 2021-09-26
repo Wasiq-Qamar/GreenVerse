@@ -10,6 +10,7 @@ import { Context as TaskContext } from "../context/TaskContext";
 
 const TaskDetailsScreen = ({ route, navigation }) => {
   let { id } = route.params;
+  console.log(id);
   const {
     state: { imageUri, email },
   } = useContext(AuthContext);
