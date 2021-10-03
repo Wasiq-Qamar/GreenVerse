@@ -37,7 +37,7 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
         <Text primary h1 bold style={{ width: width * 0.5 }}>
-          Checkout
+          Confirm Checkout
         </Text>
         <Button onPress={() => navigation.navigate("Settings")}>
           <FontAwesome5 name="home" size={30} color={theme.colors.primary} />
