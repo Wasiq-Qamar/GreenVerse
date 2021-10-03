@@ -13,8 +13,9 @@ import { theme, mocks } from "../constants";
 const { width } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
 import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 
-const ProductDescriptionScreen = ({ route }) => {
+const ProductDescriptionScreen = ({ route, navigation }) => {
   const { image, name, price } = route.params;
   const categories = mocks.volunteerCategories;
   const {
@@ -37,14 +38,7 @@ const ProductDescriptionScreen = ({ route }) => {
         </Text>
         <Block flex={false} row>
           <Button onPress={() => navigation.navigate("Settings")}>
-            {imageUri ? (
-              <Image source={{ uri: imageUri }} style={styles.avatar} />
-            ) : (
-              <Image
-                source={require("../../assets/blank-avatar.png")}
-                style={styles.avatar}
-              />
-            )}
+            <FontAwesome5 name="home" size={30} color={theme.colors.primary} />
           </Button>
         </Block>
       </Block>

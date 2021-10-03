@@ -99,7 +99,9 @@ const DonationChannelScreen = ({ route }) => {
             </Block>
           </Block>
         </Block>
-        <ChatBox messagesList={mocks.donationMessages} />
+        <>
+          <ChatBox messagesList={mocks.donationMessages} />
+        </>
       </ScrollView>
     </Block>
   );

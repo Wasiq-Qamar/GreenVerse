@@ -24,8 +24,7 @@ import Spacer from "../components/Spacer";
 import { theme, mocks } from "../constants";
 const { width } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
-import { AntDesign } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const CheckoutScreen = ({ route, navigation }) => {
   const today = new Date(Date.now());
@@ -37,10 +36,12 @@ const CheckoutScreen = ({ route, navigation }) => {
   const [address, setAddress] = useState();
   const [zipcode, setZipcode] = useState();
   const [city, setCity] = useState();
+
   const { amount } = route.params;
   const {
     state: { imageUri },
   } = useContext(AuthContext);
+
   return (
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
@@ -48,14 +49,7 @@ const CheckoutScreen = ({ route, navigation }) => {
           Checkout
         </Text>
         <Button onPress={() => navigation.navigate("Settings")}>
-          {imageUri ? (
-            <Image source={{ uri: imageUri }} style={styles.avatar} />
-          ) : (
-            <Image
-              source={require("../../assets/blank-avatar.png")}
-              style={styles.avatar}
-            />
-          )}
+          <FontAwesome5 name="home" size={30} color={theme.colors.primary} />
         </Button>
       </Block>
       <Block flex={false} column style={styles.form}>
@@ -254,6 +248,15 @@ const CheckoutScreen = ({ route, navigation }) => {
             <Button
               style={{ width: width * 0.4 }}
               color={theme.colors.primary}
+              disabled={
+                cardNumber == "" ||
+                name == "" ||
+                address == "" ||
+                zipcode == "" ||
+                city == ""
+                  ? true
+                  : false
+              }
               onPress={() =>
                 navigation.navigate("ConfirmCheckout", {
                   amount,

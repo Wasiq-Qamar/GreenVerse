@@ -6,8 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { FAB } from "react-native-elements";
-
+import { FontAwesome5 } from "@expo/vector-icons";
 import { Card, Badge, Button, Block, Text } from "../components/elements";
 import { theme, mocks } from "../constants";
 const { width } = Dimensions.get("window");
@@ -33,18 +32,11 @@ const CartScreen = ({ navigation }) => {
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
         <Text primary h1 bold>
-          Explore.
+          Cart.
         </Text>
         <Block flex={false} row>
           <Button onPress={() => navigation.navigate("Settings")}>
-            {imageUri ? (
-              <Image source={{ uri: imageUri }} style={styles.avatar} />
-            ) : (
-              <Image
-                source={require("../../assets/blank-avatar.png")}
-                style={styles.avatar}
-              />
-            )}
+            <FontAwesome5 name="home" size={30} color={theme.colors.primary} />
           </Button>
         </Block>
       </Block>

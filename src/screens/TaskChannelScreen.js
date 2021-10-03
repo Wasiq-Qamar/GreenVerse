@@ -166,14 +166,19 @@ const TaskChannelScreen = ({ route }) => {
                     {users.map((user, index) => (
                       <Block key={index}>
                         <Block row space="between">
-                          <Text h3>{index}. </Text>
-                          <Text h3>{user}</Text>
-                          <LinearProgress
-                            color="primary"
-                            value={index / 10 + 0.1}
-                            variant="determinate"
-                            style={styles.progress}
-                          />
+                          <Block column>
+                            <Block row>
+                              <Text h3>{index}. </Text>
+                              <Text h3>{user}</Text>
+                            </Block>
+                            <LinearProgress
+                              color="primary"
+                              value={index / 10 + 0.1}
+                              variant="determinate"
+                              style={styles.progress}
+                            />
+                          </Block>
+
                           <Button
                             style={[styles.userButtons, { marginTop: -15 }]}
                             color={theme.colors.primary}
@@ -371,11 +376,13 @@ const styles = StyleSheet.create({
     marginBottom: theme.sizes.base * 3.5,
   },
   topButtons: {
-    width: width * 0.1,
+    width: width * 0.12,
+    marginRight: 1,
     borderRadius: 25,
   },
   userButtons: {
-    width: width * 0.08,
+    marginRight: 1,
+    width: width * 0.12,
     borderRadius: 25,
   },
   task: {
@@ -390,7 +397,7 @@ const styles = StyleSheet.create({
   },
   image: { width: 50, height: 50, borderRadius: 50 },
   progress: {
-    width: width / 4,
+    width: width / 3,
     marginTop: 8,
   },
   uploadButton: {

@@ -1,11 +1,5 @@
-import React, { useState, useContext } from "react";
-import {
-  Image,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import { Image, StyleSheet, ScrollView, Dimensions } from "react-native";
 import {
   Divider,
   Button,
@@ -20,6 +14,7 @@ import { theme } from "../constants";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Context as AuthContext } from "../context/AuthContext";
+import { Context as TaskContext } from "../context/TaskContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -37,6 +32,8 @@ const SettingsScreen = ({ navigation }) => {
     signout,
     updateInfo,
   } = useContext(AuthContext);
+  const { fetchTasks } = useContext(TaskContext);
+
   const [newUserName, setName] = useState(userName);
   const [newEmail, setEmail] = useState(email);
   const [newContact, setContact] = useState(contact);
@@ -46,6 +43,10 @@ const SettingsScreen = ({ navigation }) => {
   const handleEdits = async () => {
     updateInfo(newUserName, newEmail, newContact, userId);
   };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   return (
     <Block white paddingTop={50}>
@@ -60,7 +61,10 @@ const SettingsScreen = ({ navigation }) => {
             <SimpleLineIcons name="logout" size={24} color="black" />
           </Button>
           {userType !== "Manager" ? null : (
-            <Button style={{ marginRight: 15 }}>
+            <Button
+              style={{ marginRight: 15 }}
+              onPress={() => navigation.navigate("Store")}
+            >
               <AntDesign
                 name="shoppingcart"
                 size={30}

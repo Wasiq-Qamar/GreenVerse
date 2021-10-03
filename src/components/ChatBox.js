@@ -55,7 +55,7 @@ const ChatBox = (props) => {
                   >
                     <Text style={styles.username}>{message.user}</Text>
                     <Text
-                      style={message.user === "wasiq" ? styles.white : null}
+                      style={message.user === "sufyan" ? null : styles.white}
                     >
                       {message.text}
                     </Text>

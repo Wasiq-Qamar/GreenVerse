@@ -6,13 +6,12 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { FAB } from "react-native-elements";
 
 import { Card, Badge, Button, Block, Text } from "../components/elements";
 import { theme, mocks } from "../constants";
 const { width } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
-import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const ExploreScreen = ({ navigation }) => {
   const categories = mocks.volunteerCategories;
@@ -28,14 +27,7 @@ const ExploreScreen = ({ navigation }) => {
         </Text>
         <Block flex={false} row>
           <Button onPress={() => navigation.navigate("Settings")}>
-            {imageUri ? (
-              <Image source={{ uri: imageUri }} style={styles.avatar} />
-            ) : (
-              <Image
-                source={require("../../assets/blank-avatar.png")}
-                style={styles.avatar}
-              />
-            )}
+            <FontAwesome5 name="home" size={30} color={theme.colors.primary} />
           </Button>
         </Block>
       </Block>
@@ -104,10 +96,10 @@ const styles = StyleSheet.create({
     marginBottom: theme.sizes.base * 3.5,
   },
   category: {
-    minWidth: (width - theme.sizes.padding * 2.4 - theme.sizes.base) / 2.2,
-    maxWidth: (width - theme.sizes.padding * 2.4 - theme.sizes.base) / 2.2,
-    height: (width - theme.sizes.padding * 2.4 - theme.sizes.base) / 1.7,
-    maxHeight: (width - theme.sizes.padding * 2.4 - theme.sizes.base) / 1.5,
+    minWidth: (width - theme.sizes.padding * 2.4 - theme.sizes.base) / 2.1,
+    maxWidth: (width - theme.sizes.padding * 2.4 - theme.sizes.base) / 2.1,
+    height: (width - theme.sizes.padding * 2.4 - theme.sizes.base) / 1.3,
+    maxHeight: (width - theme.sizes.padding * 2.4 - theme.sizes.base) / 1,
     alignSelf: "center",
     marginBottom: 30,
   },

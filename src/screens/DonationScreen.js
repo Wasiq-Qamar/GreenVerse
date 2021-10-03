@@ -221,6 +221,7 @@ const DonationScreen = ({ route, navigation }) => {
             <Button
               style={{ width: width * 0.4 }}
               color={theme.colors.primary}
+              disabled={amount === "" || cardNumber === "" ? true : false}
               onPress={() =>
                 navigation.navigate("ConfirmDonation", {
                   amount,

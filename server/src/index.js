@@ -1,5 +1,9 @@
 require("./models/User");
 require("./models/Task");
+require("./models/Donation");
+require("./models/Product");
+require("./models/Order");
+
 const express = require("express");
 const mongoose = require("mongoose");
 // const bodyParser = require("body-parser");
