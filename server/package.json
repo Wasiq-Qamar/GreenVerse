@@ -4,6 +4,7 @@
   "description": "Server on Mongo for the application GreenVerse",
   "main": "index.js",
   "scripts": {
+    "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
   "author": "Wasiq Qamar",

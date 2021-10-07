@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 
 const taskSchema = new mongoose.Schema({
   manager: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
   },
   taskName: {
     type: String,
@@ -28,7 +29,14 @@ const taskSchema = new mongoose.Schema({
   date: {
     type: String,
   },
-  peopleEnlisted: [],
+  peopleEnlisted: [
+    {
+      user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
+      progress: {type: Number, default: 0},
+      jobAssigned: {type: String, default: 'Nothing Yet'},
+      jobImage: {type: String, default: ''}
+    }
+  ],
 });
 
 mongoose.model("Task", taskSchema);
