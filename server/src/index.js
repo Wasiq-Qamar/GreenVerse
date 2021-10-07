@@ -9,6 +9,9 @@ const mongoose = require("mongoose");
 // const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoutes");
 const taskRoutes = require("./routes/taskRoutes");
+const donationRoutes = require("./routes/donationRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const productRoutes = require("./routes/productRoutes");
 const requireAuth = require("./middlewares/requireAuth");
 
 const app = express();
@@ -18,6 +21,9 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 app.use(authRoutes);
 app.use(taskRoutes);
+app.use(donationRoutes);
+app.use(orderRoutes);
+app.use(productRoutes);
 
 const mongoUri =
   "mongodb+srv://admin:admin123@cluster0.mm7v5.mongodb.net/test?retryWrites=true&w=majority";

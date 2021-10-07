@@ -119,12 +119,12 @@ const TasksListScreen = ({ route, navigation }) => {
                         disabled
                       >
                         <MaterialCommunityIcons
-                          name="timer-sand-empty"
+                          name="check"
                           size={24}
                           color="white"
                         />
                         <Text style={{ width: width * 0.11 }} bold white center>
-                          Pending
+                          Enlisted
                         </Text>
                       </Button>
                     ) : (

@@ -13,7 +13,7 @@ const { width } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
 import { Context as TaskContext } from "../context/TaskContext";
 
-const DonationChannelScreen = ({ route }) => {
+const DonationChannelScreen = ({ route, navigation }) => {
   const { name, amount, date } = route.params;
   const {
     state: { imageUri, email },
@@ -46,7 +46,7 @@ const DonationChannelScreen = ({ route }) => {
         <Text style={{ width: width * 0.6 }} primary h1 bold>
           Donation Channel
         </Text>
-        <Button onPress={() => navigation.navigate("Settings")}>
+        <Button onPress={() => navigation.navigate("SettingsScreen")}>
           {imageUri ? (
             <Image source={{ uri: imageUri }} style={styles.avatar} />
           ) : (
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     marginBottom: theme.sizes.base * 3.5,
   },
   topButtons: {
-    width: width * 0.1,
+    width: width * 0.11,
     borderRadius: 25,
   },
   task: {

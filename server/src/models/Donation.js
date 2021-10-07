@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const donationSchema = new mongoose.Schema({
-  userName: {
-    type: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
   },
   organization: {
     type: String,
@@ -18,6 +18,7 @@ const donationSchema = new mongoose.Schema({
   },
   anonymous: {
     type: Boolean,
+    default: false,
   },
   donationDate: {
     type: Date,
@@ -25,6 +26,7 @@ const donationSchema = new mongoose.Schema({
   },
   completed: {
     type: Boolean,
+    default: false,
   },
 });
 

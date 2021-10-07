@@ -53,7 +53,7 @@ const ChatBox = (props) => {
                     }
                     key={index}
                   >
-                    <Text style={styles.username}>{message.user}</Text>
+                    {/* <Text style={styles.username}>{message.user}</Text> */}
                     <Text
                       style={message.user === "sufyan" ? null : styles.white}
                     >

@@ -23,9 +23,19 @@ const { width } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
 import { Context as TaskContext } from "../context/TaskContext";
 
-const TaskChannelScreen = ({ route }) => {
+const TaskChannelScreen = ({ route, navigation }) => {
+  const {
+    campaign,
+    manager,
+    description,
+    location,
+    fromTime,
+    toTime,
+    peopleNeeded,
+    peopleEnlisted,
+  } = route.params;
   const [name, setName] = useState(route.params.name);
-  const [manager, setManager] = useState(route.params.manager);
+  const [date, setDate] = useState(route.params.date);
   const {
     state: { imageUri, email },
   } = useContext(AuthContext);
@@ -51,7 +61,7 @@ const TaskChannelScreen = ({ route }) => {
         <Text style={{ width: width * 0.4 }} primary h1 bold>
           Task Channel
         </Text>
-        <Button onPress={() => navigation.navigate("Settings")}>
+        <Button onPress={() => navigation.navigate("SettingsScreen")}>
           {imageUri ? (
             <Image source={{ uri: imageUri }} style={styles.avatar} />
           ) : (
@@ -68,160 +78,144 @@ const TaskChannelScreen = ({ route }) => {
         nestedScrollEnabled={true}
       >
         <Block flex={1} column style={styles.tasks}>
-          {state.tasks
-            .filter((item) => item.taskName === "SarSabz Campaign")
-            .map((item, index) => (
-              <Block flex={false} column key={index}>
-                <Block row flex={false}>
-                  <Badge margin={[0, 0, 15]} size={60}>
-                    {item.campaign === "garbageRecycling" ? (
-                      <Image
-                        source={require("../../assets/icons/recycle.png")}
-                        style={styles.image}
-                      />
-                    ) : item.campaign === "treePlantation" ? (
-                      <Image
-                        source={require("../../assets/icons/plant.jpg")}
-                        style={styles.image}
-                      />
-                    ) : (
-                      <Image
-                        source={require("../../assets/icons/default.jpg")}
-                        style={styles.image}
-                      />
-                    )}
-                  </Badge>
-                  <Block
-                    column
-                    flex={false}
-                    margin={[5, 0]}
-                    padding={[0, 0, 0, 5]}
-                  >
-                    <Text h2 bold primary style={{ width: width / 2 }}>
-                      {name}
-                    </Text>
-                    <Text h3 bold primary style={{ width: width / 2 }}>
-                      {item.location}
-                    </Text>
-                    <Text h4 bold primary style={{ width: width / 2 }}>
-                      {manager}
-                    </Text>
-                  </Block>
-                  <Block row space="between">
-                    <Button
-                      style={styles.topButtons}
-                      color={theme.colors.accent}
-                      onPress={() => setShowAlertEdit(!showAlertEdit)}
-                    >
-                      <Text h4 white center>
-                        <Feather name="edit" size={28} color="black" />
-                      </Text>
-                    </Button>
-                    <Button
-                      style={styles.topButtons}
-                      color={theme.colors.accent}
-                    >
-                      <Text h4 white center>
-                        <AntDesign
-                          name="shoppingcart"
-                          size={28}
-                          color="black"
-                        />
-                      </Text>
-                    </Button>
-                  </Block>
-                </Block>
-                <Block flex={false}>
-                  <Text h3 bold>
-                    Description:
-                  </Text>
-                  <Spacer>
-                    <Text h4>{item.description}</Text>
-                  </Spacer>
-                </Block>
-                <Block column flex={false}>
-                  <Text h3 bold>
-                    Details:
-                  </Text>
-                  <Spacer>
-                    <Text h4 primary style={{ width: width / 2 }}>
-                      Date: {"  "}
-                      {item.date}
-                    </Text>
-                    <Text h4 primary style={{ width: width / 2 }}>
-                      Time: {"  "}
-                      {item.fromTime + " - " + item.toTime}
-                    </Text>
-                    <Text h4 primary style={{ width: width / 2 }}>
-                      Persons Needed: {"  "}
-                      {item.peopleNeeded}
-                    </Text>
-                  </Spacer>
-                </Block>
-                <Block>
-                  <Text h3 bold>
-                    Current Users:
-                  </Text>
-                  <Spacer>
-                    {users.map((user, index) => (
-                      <Block key={index}>
-                        <Block row space="between">
-                          <Block column>
-                            <Block row>
-                              <Text h3>{index}. </Text>
-                              <Text h3>{user}</Text>
-                            </Block>
-                            <LinearProgress
-                              color="primary"
-                              value={index / 10 + 0.1}
-                              variant="determinate"
-                              style={styles.progress}
-                            />
-                          </Block>
-
-                          <Button
-                            style={[styles.userButtons, { marginTop: -15 }]}
-                            color={theme.colors.primary}
-                            onPress={() => setShowAlertJob(!showAlertJob)}
-                          >
-                            <Text h4 white center>
-                              <MaterialIcons
-                                name="assignment"
-                                size={20}
-                                color="white"
-                              />
-                            </Text>
-                          </Button>
-                          <Button
-                            style={[styles.userButtons, { marginTop: -15 }]}
-                            color={theme.colors.primary}
-                            onPress={() => setShowAlertImage(!showAlertImage)}
-                          >
-                            <Text h4 white center>
-                              <Entypo name="image" size={20} color="white" />
-                            </Text>
-                          </Button>
-                          <Button
-                            style={[styles.userButtons, { marginTop: -15 }]}
-                            color={theme.colors.primary}
-                            onPress={() => setShowAlertUser(!showAlertUser)}
-                          >
-                            <Text h4 white center style>
-                              <AntDesign
-                                name="deleteuser"
-                                size={20}
-                                color="white"
-                              />
-                            </Text>
-                          </Button>
-                        </Block>
-                        <Divider />
-                      </Block>
-                    ))}
-                  </Spacer>
-                </Block>
+          <Block flex={false} column>
+            <Block row flex={false}>
+              <Badge margin={[0, 0, 15]} size={60}>
+                {campaign === "garbageRecycling" ? (
+                  <Image
+                    source={require("../../assets/icons/recycle.png")}
+                    style={styles.image}
+                  />
+                ) : campaign === "treePlantation" ? (
+                  <Image
+                    source={require("../../assets/icons/plant.jpg")}
+                    style={styles.image}
+                  />
+                ) : (
+                  <Image
+                    source={require("../../assets/icons/default.jpg")}
+                    style={styles.image}
+                  />
+                )}
+              </Badge>
+              <Block column flex={false} margin={[5, 0]} padding={[0, 0, 0, 5]}>
+                <Text h2 bold primary style={{ width: width / 2 }}>
+                  {name}
+                </Text>
+                <Text h3 bold primary style={{ width: width / 2 }}>
+                  {location}
+                </Text>
+                <Text h4 bold primary style={{ width: width / 2 }}>
+                  {manager}
+                </Text>
               </Block>
-            ))}
+              <Block row space="between">
+                <Button
+                  style={styles.topButtons}
+                  color={theme.colors.accent}
+                  onPress={() => setShowAlertEdit(!showAlertEdit)}
+                >
+                  <Text h4 white center>
+                    <Feather name="edit" size={28} color="black" />
+                  </Text>
+                </Button>
+                <Button style={styles.topButtons} color={theme.colors.accent}>
+                  <Text h4 white center>
+                    <AntDesign name="shoppingcart" size={28} color="black" />
+                  </Text>
+                </Button>
+              </Block>
+            </Block>
+            <Block flex={false}>
+              <Text h3 bold>
+                Description:
+              </Text>
+              <Spacer>
+                <Text h4>{description}</Text>
+              </Spacer>
+            </Block>
+            <Block column flex={false}>
+              <Text h3 bold>
+                Details:
+              </Text>
+              <Spacer>
+                <Text h4 primary style={{ width: width / 2 }}>
+                  Date: {"  "}
+                  {date}
+                </Text>
+                <Text h4 primary style={{ width: width / 2 }}>
+                  Time: {"  "}
+                  {fromTime + " - " + toTime}
+                </Text>
+                <Text h4 primary style={{ width: width / 2 }}>
+                  Persons Needed: {"  "}
+                  {peopleNeeded}
+                </Text>
+              </Spacer>
+            </Block>
+            <Block>
+              <Text h3 bold>
+                Current Users:
+              </Text>
+              <Spacer>
+                {peopleEnlisted.map((user, index) => (
+                  <Block key={index}>
+                    <Block row space="between">
+                      <Block column>
+                        <Block row>
+                          <Text h3>{index}. </Text>
+                          <Text h3>{user}</Text>
+                        </Block>
+                        <LinearProgress
+                          color="primary"
+                          value={index / 10 + 0.1}
+                          variant="determinate"
+                          style={styles.progress}
+                        />
+                      </Block>
+
+                      <Button
+                        style={[styles.userButtons, { marginTop: -15 }]}
+                        color={theme.colors.primary}
+                        onPress={() => setShowAlertJob(!showAlertJob)}
+                      >
+                        <Text h4 white center>
+                          <MaterialIcons
+                            name="assignment"
+                            size={20}
+                            color="white"
+                          />
+                        </Text>
+                      </Button>
+                      <Button
+                        style={[styles.userButtons, { marginTop: -15 }]}
+                        color={theme.colors.primary}
+                        onPress={() => setShowAlertImage(!showAlertImage)}
+                      >
+                        <Text h4 white center>
+                          <Entypo name="image" size={20} color="white" />
+                        </Text>
+                      </Button>
+                      <Button
+                        style={[styles.userButtons, { marginTop: -15 }]}
+                        color={theme.colors.primary}
+                        onPress={() => setShowAlertUser(!showAlertUser)}
+                      >
+                        <Text h4 white center style>
+                          <AntDesign
+                            name="deleteuser"
+                            size={20}
+                            color="white"
+                          />
+                        </Text>
+                      </Button>
+                    </Block>
+                    <Divider />
+                  </Block>
+                ))}
+              </Spacer>
+            </Block>
+          </Block>
         </Block>
         <>
           <ChatBox messagesList={mocks.taskMessages} />
@@ -327,9 +321,9 @@ const TaskChannelScreen = ({ route }) => {
               onChangeText={setName}
             />
             <Input
-              defaultValue={manager}
+              defaultValue={date}
               style={{ width: width * 0.7, paddingHorizontal: 15 }}
-              onChangeText={setManager}
+              onChangeText={setDate}
             />
           </>
         }
@@ -376,13 +370,13 @@ const styles = StyleSheet.create({
     marginBottom: theme.sizes.base * 3.5,
   },
   topButtons: {
-    width: width * 0.12,
+    width: width * 0.11,
     marginRight: 1,
     borderRadius: 25,
   },
   userButtons: {
     marginRight: 1,
-    width: width * 0.12,
+    width: width * 0.11,
     borderRadius: 25,
   },
   task: {

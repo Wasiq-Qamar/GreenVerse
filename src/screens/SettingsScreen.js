@@ -15,6 +15,7 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Context as AuthContext } from "../context/AuthContext";
 import { Context as TaskContext } from "../context/TaskContext";
+import { Context as DonationContext } from "../context/DonationContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -33,6 +34,7 @@ const SettingsScreen = ({ navigation }) => {
     updateInfo,
   } = useContext(AuthContext);
   const { fetchTasks } = useContext(TaskContext);
+  const { fetchDonations } = useContext(DonationContext);
 
   const [newUserName, setName] = useState(userName);
   const [newEmail, setEmail] = useState(email);
@@ -46,6 +48,7 @@ const SettingsScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetchTasks();
+    fetchDonations({ userId });
   }, []);
 
   return (
@@ -151,6 +154,7 @@ const SettingsScreen = ({ navigation }) => {
         <Block>
           <LinkContainer text="Manage Tasks" routeName="MyTasks" />
           <LinkContainer text="Manage Donations" routeName="MyDonations" />
+          <LinkContainer text="My Orders" routeName="MyOrders" />
         </Block>
       </ScrollView>
 

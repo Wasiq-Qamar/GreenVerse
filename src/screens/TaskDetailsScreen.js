@@ -1,20 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Dimensions, Image, StyleSheet, ScrollView } from "react-native";
 import { Badge, Button, Block, Text } from "../components/elements";
 import Spacer from "../components/Spacer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { theme } from "../constants";
 const { width } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
 import { Context as TaskContext } from "../context/TaskContext";
+import AwesomeAlert from "react-native-awesome-alerts";
 
 const TaskDetailsScreen = ({ route, navigation }) => {
   let { id } = route.params;
-  console.log(id);
+  const [showAlert, setShowAlert] = useState(false);
+
   const {
     state: { imageUri, email },
   } = useContext(AuthContext);
-  const { state, enlistInTask } = useContext(TaskContext);
+  const { state, enlistInTask, deleteTask } = useContext(TaskContext);
 
   return (
     <Block white>
@@ -59,21 +62,33 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                       />
                     )}
                   </Badge>
-                  <Block column flex={false} margin={[5, 0]}>
-                    <Text h1 bold primary style={{ width: width / 2 }}>
+                  <Block column flex={false}>
+                    <Text h1 bold primary style={{ width: width / 3 }}>
                       {item.taskName}
                     </Text>
-                    <Text h3 bold primary style={{ width: width / 2 }}>
+                    <Text h3 bold primary style={{ width: width / 3 }}>
                       {item.location}
                     </Text>
                   </Block>
+                  <Block column flex={false}>
+                    <Button
+                      style={styles.topButtons}
+                      color="#800000"
+                      onPress={() => setShowAlert(true)}
+                    >
+                      <AntDesign name="delete" size={24} color="white" />
+                    </Button>
+                  </Block>
                 </Block>
-                <Block row flex={false} padding={[20, 0]}>
-                  <Text h3 bold style={{ width: width * 0.3 }}>
-                    Manager Name:
-                  </Text>
-                  <Text h3>{item.manager}</Text>
-                </Block>
+                {item.campaign === "garbageRecycling" ? null : (
+                  <Block row flex={false} padding={[20, 0]}>
+                    <Text h3 bold style={{ width: width * 0.3 }}>
+                      Manager Name:
+                    </Text>
+                    <Text h3>{item.manager}</Text>
+                  </Block>
+                )}
+
                 <Block flex={false}>
                   <Text h3 bold>
                     Description:
@@ -113,12 +128,12 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                       disabled
                     >
                       <MaterialCommunityIcons
-                        name="timer-sand-empty"
+                        name="check"
                         size={24}
                         color="white"
                       />
                       <Text h3 style={{ width: width * 0.2 }} bold white center>
-                        Pending
+                        Enlisted
                       </Text>
                     </Button>
                   ) : (
@@ -137,6 +152,30 @@ const TaskDetailsScreen = ({ route, navigation }) => {
             ))}
         </Block>
       </ScrollView>
+
+      {/* REMOVE TASK MODAL */}
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Delete Task"
+        message="Are you sure you want to delete this task?"
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={true}
+        cancelText="Cancel"
+        confirmText="Remove"
+        cancelButtonColor={theme.colors.accent}
+        confirmButtonColor="#ff0e0e"
+        onCancelPressed={() => {
+          setShowAlert(!showAlert);
+        }}
+        onConfirmPressed={() => {
+          deleteTask(id, () => navigation.navigate("TasksList"));
+          setShowAlert(!showAlert);
+        }}
+        contentContainerStyle={{ width: width * 0.8 }}
+      />
     </Block>
   );
 };
@@ -166,5 +205,10 @@ const styles = StyleSheet.create({
     maxHeight: (width - theme.sizes.padding * 2.4 - theme.sizes.base) / 1.5,
   },
   image: { width: 80, height: 80, borderRadius: 50 },
+  topButtons: {
+    width: width * 0.11,
+    borderRadius: 25,
+    paddingLeft: 10,
+  },
 });
 export default TaskDetailsScreen;

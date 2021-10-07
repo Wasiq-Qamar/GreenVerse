@@ -10,47 +10,37 @@ import { Button, Block, Text } from "../components/elements";
 import { theme } from "../constants";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { Context as AuthContext } from "../context/AuthContext";
-import { Context as TaskContext } from "../context/TaskContext";
 import { DataTable } from "react-native-paper";
 
 const { width, height } = Dimensions.get("window");
 
-const ManageTasksScreen = ({ navigation }) => {
+const ManageOrdersScreen = ({ navigation }) => {
   const {
-    state: { imageUri, email },
+    state: { imageUri, userName, userId, userType },
     signout,
   } = useContext(AuthContext);
-  const {
-    state: { tasks },
-  } = useContext(TaskContext);
 
-  // const tasks = [
-  //   {
-  //     id: 1,
-  //     name: "Sarsabz Pakistan",
-  //     managerName: "Manager",
-  //     status: "Pending",
-  //     date: "05-06-2021",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Clean Karachi",
-  //     managerName: "Manager 2",
-  //     status: "Completed",
-  //     date: "04-03-2021",
-  //   },
-  // ];
-
-  const filteredTasks = tasks.filter((task) =>
-    task.peopleEnlisted.includes(email)
-  );
+  const orders = [
+    {
+      id: 1,
+      name: "Order 1",
+      amount: "20,000",
+      date: "05-06-2021",
+    },
+    {
+      id: 2,
+      name: "Order 2",
+      amount: "35,000",
+      date: "04-03-2021",
+    },
+  ];
 
   return (
     <Block white paddingTop={20}>
       <Block flex={false} row center space="between" style={styles.header}>
         <Block flex={3}>
           <Text h1 bold primary>
-            My Tasks
+            My Orders
           </Text>
         </Block>
         <Block flex={1} row space="between">
@@ -73,52 +63,31 @@ const ManageTasksScreen = ({ navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <DataTable>
           <DataTable.Header>
+            <DataTable.Title style={{ flex: 2 }}> Order Title </DataTable.Title>
             <DataTable.Title style={{ flex: 2 }}>
               {" "}
-              Campaign Name{" "}
+              Order Amount{" "}
             </DataTable.Title>
-            <DataTable.Title style={{ flex: 2 }}>
-              {" "}
-              Manager Name{" "}
-            </DataTable.Title>
-            <DataTable.Title style={{ flex: 1.5 }}> Status </DataTable.Title>
-            <DataTable.Title style={{ flex: 1.5 }}> Date </DataTable.Title>
+            <DataTable.Title style={{ flex: 2 }}> Date </DataTable.Title>
           </DataTable.Header>
 
-          {filteredTasks.map((task, index) => (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("TaskChannel", {
-                  campaign: task.campaign,
-                  name: task.taskName,
-                  manager: task.manager || "None",
-                  description: task.description,
-                  location: task.location,
-                  date: task.date,
-                  fromTime: task.fromTime,
-                  toTime: task.toTime,
-                  peopleNeeded: task.peopleNeeded,
-                  peopleEnlisted: task.peopleEnlisted,
-                })
-              }
-              key={task._id}
-            >
+          {orders.map((order, index) => (
+            <TouchableOpacity key={order.id}>
               <DataTable.Row
-                key={task.id}
+                key={order.id}
                 style={index % 2 === 0 ? styles.evenRow : null}
               >
                 <DataTable.Title style={{ flex: 2 }}>
                   {" "}
-                  {task.taskName}{" "}
+                  {order.name}{" "}
+                </DataTable.Title>
+                <DataTable.Title style={{ flex: 2 }}>
+                  {"Rs. "}
+                  {order.amount}{" "}
                 </DataTable.Title>
                 <DataTable.Title style={{ flex: 2 }}>
                   {" "}
-                  {task.manager || "None"}{" "}
-                </DataTable.Title>
-                <DataTable.Title style={{ flex: 1.5 }}>Ongoing</DataTable.Title>
-                <DataTable.Title style={{ flex: 1.5 }}>
-                  {" "}
-                  {task.date}{" "}
+                  {order.date}{" "}
                 </DataTable.Title>
               </DataTable.Row>
             </TouchableOpacity>
@@ -129,7 +98,7 @@ const ManageTasksScreen = ({ navigation }) => {
   );
 };
 
-export default ManageTasksScreen;
+export default ManageOrdersScreen;
 
 const styles = StyleSheet.create({
   header: {

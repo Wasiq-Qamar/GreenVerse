@@ -10,6 +10,7 @@ import { Button, Block, Text } from "../components/elements";
 import { theme } from "../constants";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { Context as AuthContext } from "../context/AuthContext";
+import { Context as DonationContext } from "../context/DonationContext";
 import { DataTable } from "react-native-paper";
 
 const { width, height } = Dimensions.get("window");
@@ -19,23 +20,26 @@ const ManageDonationScreen = ({ navigation }) => {
     state: { imageUri, userName, userId, userType },
     signout,
   } = useContext(AuthContext);
+  const {
+    state: { donations },
+  } = useContext(DonationContext);
 
-  const donations = [
-    {
-      id: 1,
-      name: "Edhi Welfare",
-      amount: "20,000",
-      anonymous: "Yes",
-      date: "05-06-2021",
-    },
-    {
-      id: 2,
-      name: "Salyani Trust",
-      amount: "35,000",
-      anonymous: "No",
-      date: "04-03-2021",
-    },
-  ];
+  // const donations = [
+  //   {
+  //     id: 1,
+  //     name: "Edhi Welfare",
+  //     amount: "20,000",
+  //     anonymous: "Yes",
+  //     date: "05-06-2021",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Salyani Trust",
+  //     amount: "35,000",
+  //     anonymous: "No",
+  //     date: "04-03-2021",
+  //   },
+  // ];
 
   return (
     <Block white paddingTop={20}>
@@ -49,7 +53,7 @@ const ManageDonationScreen = ({ navigation }) => {
           <Button onPress={signout}>
             <SimpleLineIcons name="logout" size={24} color="black" />
           </Button>
-          <Button onPress={() => setChangePicture(true)}>
+          <Button onPress={() => navigation.navigate("SettingsScreen")}>
             {imageUri ? (
               <Image source={{ uri: imageUri }} style={styles.avatar} />
             ) : (
@@ -81,12 +85,12 @@ const ManageDonationScreen = ({ navigation }) => {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate("DonationChannel", {
-                  name: donation.name,
+                  name: donation.organization,
                   amount: donation.amount,
-                  date: donation.date,
+                  date: donation.donationDate.split("T")[0],
                 })
               }
-              key={donation.id}
+              key={donation._id}
             >
               <DataTable.Row
                 key={donation.id}
@@ -94,7 +98,7 @@ const ManageDonationScreen = ({ navigation }) => {
               >
                 <DataTable.Title style={{ flex: 2 }}>
                   {" "}
-                  {donation.name}{" "}
+                  {donation.organization}{" "}
                 </DataTable.Title>
                 <DataTable.Title style={{ flex: 2 }}>
                   {"Rs. "}
@@ -102,11 +106,11 @@ const ManageDonationScreen = ({ navigation }) => {
                 </DataTable.Title>
                 <DataTable.Title style={{ flex: 1.5 }}>
                   {" "}
-                  {donation.anonymous}{" "}
+                  {donation.anonymous ? "Yes" : "No"}{" "}
                 </DataTable.Title>
                 <DataTable.Title style={{ flex: 1.5 }}>
                   {" "}
-                  {donation.date}{" "}
+                  {donation.donationDate.split("T")[0]}{" "}
                 </DataTable.Title>
               </DataTable.Row>
             </TouchableOpacity>

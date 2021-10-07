@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     backgroundColor: theme.colors.primary,
-    width: width * 0.1,
+    width: width * 0.11,
     alignItems: "center",
     borderRadius: 25,
   },

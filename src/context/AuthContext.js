@@ -207,5 +207,6 @@ export const { Provider, Context } = createDataContext(
     errorMessage: "",
     userType: "",
     isLoading: true,
+    email: "",
   }
 );

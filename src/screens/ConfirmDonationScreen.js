@@ -24,14 +24,31 @@ import Spacer from "../components/Spacer";
 import { theme, mocks } from "../constants";
 const { width } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
+import { Context as DonationContext } from "../context/DonationContext";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const VolunteerListScreen = ({ route, navigation }) => {
   const { amount, method, cardNumber, name, anonymous } = route.params;
   const {
-    state: { imageUri },
+    state: { imageUri, userId },
   } = useContext(AuthContext);
+  const { addDonation } = useContext(DonationContext);
+
+  const handleDonation = (callback) => {
+    addDonation(
+      {
+        organization: name,
+        userId,
+        method,
+        amount,
+        cardNumber,
+        anonymous,
+      },
+      callback
+    );
+  };
+
   return (
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
@@ -154,7 +171,9 @@ const VolunteerListScreen = ({ route, navigation }) => {
             <Button
               style={{ width: width * 0.5 }}
               color={theme.colors.primary}
-              onPress={() => navigation.navigate("DonateNgosList")}
+              onPress={() =>
+                handleDonation(() => navigation.navigate("DonateNgosList"))
+              }
             >
               <Text h3 center white bold>
                 Confirm Transaction

@@ -31,10 +31,13 @@ import ExploreScreen from "./src/screens/ExploreScreen";
 import ProductDescriptionScreen from "./src/screens/ProductDescriptionScreen";
 import CheckoutScreen from "./src/screens/CheckoutScreen";
 import ConfirmCheckoutScreen from "./src/screens/ConfirmCheckoutScreen";
+import ManageOrdersScreen from "./src/screens/ManageOrdersScreen";
 
 //  CONTEXT
 import { Provider as AuthProvider } from "./src/context/AuthContext";
 import { Provider as TaskProvider } from "./src/context/TaskContext";
+import { Provider as DonationProvider } from "./src/context/DonationContext";
+import { Provider as OrderProvider } from "./src/context/OrderContext";
 import { Context as AuthContext } from "./src/context/AuthContext";
 
 //ICONS
@@ -93,6 +96,7 @@ const SettingsStack = () => {
       />
       <Stack.Screen name="MyTasks" component={ManageTasksScreen} />
       <Stack.Screen name="MyDonations" component={ManageDonationScreen} />
+      <Stack.Screen name="MyOrders" component={ManageOrdersScreen} />
       <Stack.Screen name="TaskChannel" component={TaskChannelScreen} />
       <Stack.Screen name="DonationChannel" component={DonationChannelScreen} />
     </Stack.Navigator>
@@ -285,10 +289,14 @@ function App() {
 
 export default () => {
   return (
-    <TaskProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </TaskProvider>
+    <OrderProvider>
+      <DonationProvider>
+        <TaskProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </TaskProvider>
+      </DonationProvider>
+    </OrderProvider>
   );
 };

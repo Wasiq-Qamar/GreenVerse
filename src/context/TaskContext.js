@@ -7,6 +7,10 @@ const taskReducer = (state, action) => {
     //   return { ...state, tasks: [...state.tasks, action.payload] };
     case "fetch_tasks":
       return { tasks: [...action.payload] };
+    case "delete_tasks": {
+      let result = state.tasks.filter((task) => task._id !== action.payload);
+      return { tasks: result };
+    }
     default:
       return state;
   }
@@ -18,6 +22,18 @@ const enlistInTask = (dispatch) => async (id, email) => {
       peopleEnlisted: email,
     });
     console.log(res.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const deleteTask = (dispatch) => async (id, callback) => {
+  try {
+    const res = await greenverseApi.delete(`/task/${id}`);
+    dispatch({ type: "delete_tasks", payload: id });
+    if (callback) {
+      callback();
+    }
   } catch (err) {
     console.log(err);
   }
@@ -71,6 +87,6 @@ const createTask =
 
 export const { Context, Provider } = createDataContext(
   taskReducer,
-  { fetchTasks, createTask, enlistInTask },
+  { fetchTasks, createTask, enlistInTask, deleteTask },
   { tasks: [] }
 );

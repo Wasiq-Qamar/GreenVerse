@@ -53,6 +53,18 @@ router.get("/tasks", async (req, res) => {
   }
 });
 
+router.get("/user/tasks", async (req, res) => {
+  const userId = req.body;
+
+  try {
+    const tasks = await Task.find();
+    tasks = tasks.filter((item) => item.userId === userId);
+    res.send(tasks);
+  } catch (err) {
+    return res.status(422).send(err);
+  }
+});
+
 router.patch("/task/:id", async (req, res) => {
   const id = req.params.id;
   const updates = req.body;
@@ -69,6 +81,17 @@ router.patch("/task/:id", async (req, res) => {
       }
     );
     res.send(result);
+  } catch (err) {
+    return res.status(422).send(err);
+  }
+});
+
+router.delete("/task/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    await Task.findByIdAndDelete(id);
+    res.send("Deleted Successfully");
   } catch (err) {
     return res.status(422).send(err);
   }
