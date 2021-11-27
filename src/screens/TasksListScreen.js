@@ -31,6 +31,16 @@ const TasksListScreen = ({ route, navigation }) => {
     }, [])
   );
 
+  const checkPeopleEnlisted = (arr, taskId) => {
+    let flag = false;
+    arr.forEach((obj) => {
+      if (obj.user._id === userId) {
+        flag = true;
+      }
+    });
+    return flag ? true : false;
+  };
+
   return (
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
@@ -107,7 +117,7 @@ const TasksListScreen = ({ route, navigation }) => {
                     </Text>
                   </Block>
                   <Block flex={false} style={{ alignItems: "flex-end" }}>
-                    {item.peopleEnlisted.includes(email) ? (
+                    {checkPeopleEnlisted(item.peopleEnlisted, item._id) ? (
                       <Button
                         style={{
                           width: width * 0.35,
@@ -132,7 +142,7 @@ const TasksListScreen = ({ route, navigation }) => {
                         style={{ width: width * 0.35 }}
                         color={theme.colors.accent}
                         right
-                        onPress={() => enlistInTask(item._id, email)}
+                        onPress={() => enlistInTask(item._id, userId)}
                       >
                         <Text bold white center>
                           Enlist

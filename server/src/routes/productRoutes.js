@@ -1,17 +1,19 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Product = mongoose.model("Donation");
+const Product = mongoose.model("Product");
 
 const router = express.Router();
 
 router.post("/product", async (req, res) => {
-  const { productName, productImg, quantity } = req.body;
+  const { productName, productImg, quantity, category, price } = req.body;
 
   try {
     const product = new Product({
       productName,
       productImg,
       quantity,
+      category,
+      price,
     });
     await product.save();
 

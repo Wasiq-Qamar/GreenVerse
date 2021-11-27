@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Image,
   StyleSheet,
@@ -16,34 +16,14 @@ import { DataTable } from "react-native-paper";
 const { width, height } = Dimensions.get("window");
 
 const ManageTasksScreen = ({ navigation }) => {
+  const [currentUserTasks, setCurrentUserTasks] = useState([]);
   const {
-    state: { imageUri, email },
+    state: { imageUri, userId },
     signout,
   } = useContext(AuthContext);
   const {
     state: { tasks },
   } = useContext(TaskContext);
-
-  // const tasks = [
-  //   {
-  //     id: 1,
-  //     name: "Sarsabz Pakistan",
-  //     managerName: "Manager",
-  //     status: "Pending",
-  //     date: "05-06-2021",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Clean Karachi",
-  //     managerName: "Manager 2",
-  //     status: "Completed",
-  //     date: "04-03-2021",
-  //   },
-  // ];
-
-  const filteredTasks = tasks.filter((task) =>
-    task.peopleEnlisted.includes(email)
-  );
 
   return (
     <Block white paddingTop={20}>
@@ -81,26 +61,21 @@ const ManageTasksScreen = ({ navigation }) => {
               {" "}
               Manager Name{" "}
             </DataTable.Title>
-            <DataTable.Title style={{ flex: 1.5 }}> Status </DataTable.Title>
+            <DataTable.Title style={{ flex: 1.5 }}>
+              {" "}
+              Volunteers{" "}
+            </DataTable.Title>
             <DataTable.Title style={{ flex: 1.5 }}> Date </DataTable.Title>
           </DataTable.Header>
-
-          {filteredTasks.map((task, index) => (
+          {tasks.map((task, index) => (
             <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("TaskChannel", {
-                  campaign: task.campaign,
-                  name: task.taskName,
-                  manager: task.manager || "None",
-                  description: task.description,
-                  location: task.location,
-                  date: task.date,
-                  fromTime: task.fromTime,
-                  toTime: task.toTime,
-                  peopleNeeded: task.peopleNeeded,
-                  peopleEnlisted: task.peopleEnlisted,
-                })
-              }
+              // onPress={() =>
+              //   navigation.navigate("TaskChannel", {
+              //     name: task.organization,
+              //     amount: task.amount,
+              //     date: task.taskDate.split("T")[0],
+              //   })
+              // }
               key={task._id}
             >
               <DataTable.Row
@@ -112,13 +87,13 @@ const ManageTasksScreen = ({ navigation }) => {
                   {task.taskName}{" "}
                 </DataTable.Title>
                 <DataTable.Title style={{ flex: 2 }}>
-                  {" "}
-                  {task.manager || "None"}{" "}
+                  {task.manager.userName}
                 </DataTable.Title>
-                <DataTable.Title style={{ flex: 1.5 }}>Ongoing</DataTable.Title>
                 <DataTable.Title style={{ flex: 1.5 }}>
-                  {" "}
-                  {task.date}{" "}
+                  {task.peopleEnlisted.length}
+                </DataTable.Title>
+                <DataTable.Title style={{ flex: 1.5 }}>
+                  {task.date}
                 </DataTable.Title>
               </DataTable.Row>
             </TouchableOpacity>

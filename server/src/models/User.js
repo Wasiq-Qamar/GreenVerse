@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema({
   image: {
     type: String,
   },
+  tasks: [
+    {
+      task: { type: mongoose.Schema.Types.ObjectId, ref: "Task" },
+    },
+  ],
 });
 
 userSchema.pre("save", function (next) {

@@ -15,9 +15,19 @@ const TaskDetailsScreen = ({ route, navigation }) => {
   const [showAlert, setShowAlert] = useState(false);
 
   const {
-    state: { imageUri, email },
+    state: { imageUri, email, userId },
   } = useContext(AuthContext);
   const { state, enlistInTask, deleteTask } = useContext(TaskContext);
+
+  const checkPeopleEnlisted = (arr) => {
+    let flag = false;
+    arr.forEach((obj) => {
+      if (obj.user._id === userId) {
+        flag = true;
+      }
+    });
+    return flag ? true : false;
+  };
 
   return (
     <Block white>
@@ -85,7 +95,7 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                     <Text h3 bold style={{ width: width * 0.3 }}>
                       Manager Name:
                     </Text>
-                    <Text h3>{item.manager}</Text>
+                    <Text h3>{item.manager.userName}</Text>
                   </Block>
                 )}
 
@@ -117,7 +127,7 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                   </Spacer>
                 </Block>
                 <Block flex={false} center>
-                  {item.peopleEnlisted.includes(email) ? (
+                  {checkPeopleEnlisted(item.peopleEnlisted) ? (
                     <Button
                       style={{
                         width: width * 0.5,

@@ -11,7 +11,7 @@ router.post("/signup", async (req, res) => {
   const userName = "";
   const image = "";
   const contact = "";
-  const userType = "User";
+  const userType = req.body.userType || "User";
 
   if (!email || !password) {
     return res.status(422).json({ error: "Must provide email and password" });
@@ -50,6 +50,7 @@ router.post("/signup", async (req, res) => {
       imageUri: image,
       contact: contact,
       userType: userType,
+      tasks: [],
     });
   } catch (err) {
     console.log(err);

@@ -33,7 +33,7 @@ const SettingsScreen = ({ navigation }) => {
     signout,
     updateInfo,
   } = useContext(AuthContext);
-  const { fetchTasks } = useContext(TaskContext);
+  const { fetchTasks, fetchMyTasks } = useContext(TaskContext);
   const { fetchDonations } = useContext(DonationContext);
 
   const [newUserName, setName] = useState(userName);
@@ -47,6 +47,7 @@ const SettingsScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
+    fetchMyTasks(userId);
     fetchTasks();
     fetchDonations({ userId });
   }, []);

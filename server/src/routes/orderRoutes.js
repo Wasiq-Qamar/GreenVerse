@@ -8,6 +8,7 @@ router.post("/order", async (req, res) => {
   const {
     userId,
     productId,
+    buyerName,
     method,
     amount,
     cardNumber,
@@ -22,6 +23,7 @@ router.post("/order", async (req, res) => {
     const order = new Order({
       userId,
       productId,
+      buyerName,
       method,
       amount,
       cardNumber,
@@ -43,7 +45,12 @@ router.post("/order", async (req, res) => {
 
 router.get("/orders", async (req, res) => {
   try {
-    const orders = await Order.find();
+    const orders = await Order.find()
+      .populate({ path: "userId", select: "userName email contact" })
+      .populate({
+        path: "productId",
+        select: "productName productImg category price",
+      });
     if (!orders) {
       return res.status(422).send({ error: "No orders found" });
     }
@@ -53,14 +60,41 @@ router.get("/orders", async (req, res) => {
   }
 });
 
-router.get("/user/orders", async (req, res) => {
-  const userId = req.body;
+router.get("/user/orders/:userId", async (req, res) => {
+  const { userId } = req.params;
 
   try {
-    const orders = await Order.find();
-    orders = orders.filter((item) => item.userId === userId);
+    let orders = await Order.find()
+      .populate({ path: "userId", select: "userName email contact" })
+      .populate({
+        path: "productId",
+        select: "productName productImg category price",
+      });
+    console.log(orders);
+    orders = orders.filter((item) => item.userId._id == userId);
     res.send(orders);
   } catch (err) {
+    console.log(err);
+    return res.status(422).send(err);
+  }
+});
+
+/**
+ * PATCH complete order for amdin
+ */
+
+router.patch("/order/:orderId", async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { completed: true },
+      { new: true }
+    );
+    res.send(order);
+  } catch (err) {
+    console.log(err);
     return res.status(422).send(err);
   }
 });

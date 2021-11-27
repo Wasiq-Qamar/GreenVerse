@@ -84,17 +84,6 @@ const CheckoutScreen = ({ route, navigation }) => {
                 <Text primary>EasyPaisa</Text>
               </Block>
             </Block>
-            <Block row flex={3}>
-              <RadioButton
-                value="Debit Card"
-                status={method === "Debit Card" ? "checked" : "unchecked"}
-                onPress={() => setMethod("Debit Card")}
-                color={theme.colors.primary}
-              />
-              <Block middle flex={false}>
-                <Text primary>Debit Card</Text>
-              </Block>
-            </Block>
           </Block>
         </Block>
 
