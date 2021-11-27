@@ -3,8 +3,8 @@ import greenverseApi from "../api/greenverse";
 
 const donationReducer = (state, action) => {
   switch (action.type) {
-    // case "create_task":
-    //   return { ...state, tasks: [...state.tasks, action.payload] };
+    case "add_donation":
+      return { ...state, donations: [...state.donations, action.payload] };
     case "fetch_donations":
       return { donations: [...action.payload] };
     default:
@@ -41,7 +41,7 @@ const addDonation =
         cardNumber,
         anonymous,
       });
-      // dispatch({ type: "create_task", payload: res.data });
+      dispatch({ type: "add_donation", payload: res.data });
       if (callback) {
         callback();
       }

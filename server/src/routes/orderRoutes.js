@@ -15,8 +15,6 @@ router.post("/order", async (req, res) => {
     address,
     zipcode,
     city,
-    orderDate,
-    completed,
   } = req.body;
 
   try {
@@ -30,8 +28,6 @@ router.post("/order", async (req, res) => {
       address,
       zipcode,
       city,
-      orderDate,
-      completed,
     });
     await order.save();
 

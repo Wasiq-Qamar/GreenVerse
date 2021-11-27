@@ -28,7 +28,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 const ConfirmCheckoutScreen = ({ route, navigation }) => {
   const today = new Date(Date.now());
-  const { amount, method, cardNumber, name, address, zipcode, city } =
+  const { totalBill, method, cardNumber, name, address, zipcode, city } =
     route.params;
   const {
     state: { imageUri },
@@ -47,12 +47,12 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
         <Block flex={false} row center space="between" margin={[0, 0, 10, 0]}>
           <Block flex={1.5}>
             <Text left primary>
-              Amount:
+              Total Bill:
             </Text>
           </Block>
           <Block flex={7}>
             <Text h3 bold primary>
-              {amount}
+              {totalBill}
             </Text>
           </Block>
         </Block>
@@ -70,20 +70,23 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
           </Block>
         </Block>
 
-        <Divider margin={[theme.sizes.base, theme.sizes.base]} />
-
-        <Block flex={false} row center space="between">
-          <Block flex={1.5}>
-            <Text left primary>
-              Card Number:
-            </Text>
-          </Block>
-          <Block flex={7}>
-            <Text h3 bold primary>
-              {cardNumber}
-            </Text>
-          </Block>
-        </Block>
+        {cardNumber === "" ? null : (
+          <>
+            <Divider margin={[theme.sizes.base, theme.sizes.base]} />
+            <Block flex={false} row center space="between">
+              <Block flex={1.5}>
+                <Text left primary>
+                  Card Number:
+                </Text>
+              </Block>
+              <Block flex={7}>
+                <Text h3 bold primary>
+                  {cardNumber}
+                </Text>
+              </Block>
+            </Block>
+          </>
+        )}
 
         <Divider margin={[theme.sizes.base, theme.sizes.base]} />
 

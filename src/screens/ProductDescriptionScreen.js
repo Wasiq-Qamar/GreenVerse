@@ -12,15 +12,17 @@ import { Card, Badge, Button, Block, Text } from "../components/elements";
 import { theme, mocks } from "../constants";
 const { width } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
+import { Context as ProductContext } from "../context/ProductContext";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 const ProductDescriptionScreen = ({ route, navigation }) => {
-  const { image, name, price } = route.params;
+  const { product } = route.params;
   const categories = mocks.volunteerCategories;
   const {
     state: { imageUri, userType },
   } = useContext(AuthContext);
+  const { addToCart } = useContext(ProductContext);
   const [quantity, setQuantity] = useState(0);
 
   const handleQuantity = (num) => {
@@ -28,6 +30,18 @@ const ProductDescriptionScreen = ({ route, navigation }) => {
       return;
     }
     setQuantity(quantity + num);
+  };
+
+  const addItemToCart = (item) => {
+    const product = {
+      id: item._id,
+      productName: item.productName,
+      productImg: item.productImg,
+      price: item.price,
+      quantity: quantity,
+      category: item.category,
+    };
+    addToCart({ product });
   };
 
   return (
@@ -50,7 +64,7 @@ const ProductDescriptionScreen = ({ route, navigation }) => {
         <Block flex={false} row middle style={styles.categories}>
           <Card center middle shadow>
             {/* <Badge margin={[0, 0, 15]} size={130} color="rgba(41,216,143,0.20)"> */}
-            <Image source={image} style={styles.image} />
+            <Image source={{ uri: product.productImg }} style={styles.image} />
             {/* </Badge> */}
             <Block
               column
@@ -58,11 +72,15 @@ const ProductDescriptionScreen = ({ route, navigation }) => {
               style={{ width: width * 0.8 }}
               padding={[25, 0, 0, 25]}
             >
-              <Text h3 bold style={{ marginBottom: 15 }}>
-                Name:{"\t\t"} {name}
+              <Text h3 bold style={{ marginBottom: 10 }}>
+                Name:{"\t\t"} <Text h4>{product.productName}</Text>
+              </Text>
+              <Text h3 bold style={{ marginBottom: 10 }}>
+                Price:{"\t\t\t"} <Text h4>Rs. {product.price}</Text>
               </Text>
               <Text h3 bold>
-                Price:{"\t\t\t"} Rs. {price}
+                Quantity:{"\t\t\t"}
+                <Text h4> {product.quantity} items</Text>
               </Text>
             </Block>
           </Card>
@@ -83,7 +101,7 @@ const ProductDescriptionScreen = ({ route, navigation }) => {
           </Button>
         </Block>
         <Block center>
-          <Button style={styles.button}>
+          <Button style={styles.button} onPress={() => addItemToCart(product)}>
             <Text>Add to Cart</Text>
           </Button>
         </Block>

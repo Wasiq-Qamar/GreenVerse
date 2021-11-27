@@ -5,10 +5,12 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  productId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Product",
-  },
+  productId: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+    },
+  ],
   buyerName: {
     type: String,
   },
@@ -36,6 +38,7 @@ const orderSchema = new mongoose.Schema({
   },
   completed: {
     type: Boolean,
+    default: false,
   },
 });
 

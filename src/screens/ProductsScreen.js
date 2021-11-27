@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Dimensions,
   Image,
@@ -25,7 +25,7 @@ const ProductsScreen = ({ navigation }) => {
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
         <Text primary h1 bold>
-          Products.
+          Products
         </Text>
         <Block flex={false} row>
           <Button onPress={() => navigation.navigate("Settings")}>
@@ -43,7 +43,12 @@ const ProductsScreen = ({ navigation }) => {
             <TouchableOpacity
               key={category.name}
               style={{ width: width * 0.4 }}
-              onPress={() => navigation.navigate("Explore")}
+              onPress={() =>
+                navigation.navigate("Explore", {
+                  category: category.id,
+                  categoryName: category.name,
+                })
+              }
             >
               <Card center middle shadow style={styles.category}>
                 <Badge

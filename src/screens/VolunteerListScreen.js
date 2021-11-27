@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Dimensions,
   Image,
@@ -12,7 +12,8 @@ import { Card, Badge, Button, Block, Text } from "../components/elements";
 import { theme, mocks } from "../constants";
 const { width } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
-import { AntDesign } from "@expo/vector-icons";
+import { Context as ProductContext } from "../context/ProductContext";
+import { FontAwesome5, AntDesign } from "@expo/vector-icons";
 
 const VolunteerListScreen = ({ navigation }) => {
   const categories = mocks.volunteerCategories;
@@ -20,11 +21,17 @@ const VolunteerListScreen = ({ navigation }) => {
     state: { imageUri, userType },
   } = useContext(AuthContext);
 
+  const { fetchProducts } = useContext(ProductContext);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   return (
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
         <Text primary h1 bold>
-          Volunteer.
+          Volunteer
         </Text>
         <Block flex={false} row>
           {userType !== "Manager" ? null : (
@@ -32,9 +39,9 @@ const VolunteerListScreen = ({ navigation }) => {
               style={{ marginRight: 15 }}
               onPress={() => navigation.navigate("Store")}
             >
-              <AntDesign
-                name="shoppingcart"
-                size={30}
+              <FontAwesome5
+                name="store"
+                size={24}
                 color={theme.colors.primary}
               />
             </Button>

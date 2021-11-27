@@ -80,7 +80,7 @@ const TaskChannelScreen = ({ route, navigation }) => {
         <Block flex={1} column style={styles.tasks}>
           <Block flex={false} column>
             <Block row flex={false}>
-              <Badge margin={[0, 0, 15]} size={60}>
+              <Badge margin={[0, 0, 12]} size={60}>
                 {campaign === "garbageRecycling" ? (
                   <Image
                     source={require("../../assets/icons/recycle.png")}
@@ -98,7 +98,7 @@ const TaskChannelScreen = ({ route, navigation }) => {
                   />
                 )}
               </Badge>
-              <Block column flex={false} margin={[5, 0]} padding={[0, 0, 0, 5]}>
+              <Block column flex={false} style={{ marginTop: -12 }}>
                 <Text h2 bold primary style={{ width: width / 2 }}>
                   {name}
                 </Text>
@@ -109,7 +109,7 @@ const TaskChannelScreen = ({ route, navigation }) => {
                   {manager}
                 </Text>
               </Block>
-              <Block row space="between">
+              <Block row style={{ marginLeft: -10 }}>
                 <Button
                   style={styles.topButtons}
                   color={theme.colors.accent}
@@ -158,17 +158,21 @@ const TaskChannelScreen = ({ route, navigation }) => {
                 Current Users:
               </Text>
               <Spacer>
-                {peopleEnlisted.map((user, index) => (
+                {peopleEnlisted.map((item, index) => (
                   <Block key={index}>
                     <Block row space="between">
                       <Block column>
                         <Block row>
                           <Text h3>{index}. </Text>
-                          <Text h3>{user}</Text>
+                          <Text h3>
+                            {item.user.userName
+                              ? item.user.userName
+                              : item.user.email}
+                          </Text>
                         </Block>
                         <LinearProgress
                           color="primary"
-                          value={index / 10 + 0.1}
+                          value={item.progress}
                           variant="determinate"
                           style={styles.progress}
                         />
@@ -370,13 +374,13 @@ const styles = StyleSheet.create({
     marginBottom: theme.sizes.base * 3.5,
   },
   topButtons: {
-    width: width * 0.11,
-    marginRight: 1,
+    width: width * 0.12,
+    marginHorizontal: 2,
     borderRadius: 25,
   },
   userButtons: {
-    marginRight: 1,
-    width: width * 0.11,
+    marginHorizontal: 2,
+    width: width * 0.12,
     borderRadius: 25,
   },
   task: {

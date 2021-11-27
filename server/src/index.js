@@ -6,6 +6,7 @@ require("./models/Order");
 
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 // const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoutes");
 const taskRoutes = require("./routes/taskRoutes");
@@ -16,6 +17,7 @@ const requireAuth = require("./middlewares/requireAuth");
 
 const app = express();
 
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));

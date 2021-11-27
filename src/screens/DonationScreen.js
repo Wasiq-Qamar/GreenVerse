@@ -81,7 +81,7 @@ const DonationScreen = ({ route, navigation }) => {
             </Text>
           </Block>
           <Block row flex={7}>
-            <Block row flex={3}>
+            {/* <Block row flex={3}>
               <RadioButton
                 value="EasyPaisa"
                 status={method === "EasyPaisa" ? "checked" : "unchecked"}
@@ -91,7 +91,7 @@ const DonationScreen = ({ route, navigation }) => {
               <Block middle flex={false}>
                 <Text primary>EasyPaisa</Text>
               </Block>
-            </Block>
+            </Block> */}
             <Block row flex={3}>
               <RadioButton
                 value="Debit Card"
@@ -106,10 +106,9 @@ const DonationScreen = ({ route, navigation }) => {
           </Block>
         </Block>
 
-        <Divider margin={[theme.sizes.base, theme.sizes.base]} />
-
         {method === "Debit Card" ? (
           <>
+            <Divider margin={[theme.sizes.base, theme.sizes.base]} />
             <Block flex={false} row center space="between">
               <Block flex={1.5}>
                 <Text left primary>
@@ -159,24 +158,24 @@ const DonationScreen = ({ route, navigation }) => {
               </Block>
             </Block>
           </>
-        ) : method === "EasyPaisa" ? (
-          <Block flex={false} row center space="between">
-            <Block flex={1.5}>
-              <Text left primary>
-                Phone Number:
-              </Text>
-            </Block>
-            <Block flex={7}>
-              <Input
-                defaultValue={cardNumber}
-                style={styles.input}
-                onChangeText={setCardNumber}
-                placeholder="Enter Phone Number"
-                number
-              />
-            </Block>
-          </Block>
-        ) : null}
+        ) : // ) : method === "EasyPaisa" ? (
+        //   <Block flex={false} row center space="between">
+        //     <Block flex={1.5}>
+        //       <Text left primary>
+        //         Phone Number:
+        //       </Text>
+        //     </Block>
+        //     <Block flex={7}>
+        //       <Input
+        //         defaultValue={cardNumber}
+        //         style={styles.input}
+        //         onChangeText={setCardNumber}
+        //         placeholder="Enter Phone Number"
+        //         number
+        //       />
+        //     </Block>
+        //   </Block>
+        null}
 
         <Divider margin={[theme.sizes.base, theme.sizes.base]} />
 

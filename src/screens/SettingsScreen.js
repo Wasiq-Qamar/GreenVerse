@@ -13,6 +13,7 @@ import ImageSelecter from "../components/ImageSelecter";
 import { theme } from "../constants";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { Context as AuthContext } from "../context/AuthContext";
 import { Context as TaskContext } from "../context/TaskContext";
 import { Context as DonationContext } from "../context/DonationContext";
@@ -69,9 +70,9 @@ const SettingsScreen = ({ navigation }) => {
               style={{ marginRight: 15 }}
               onPress={() => navigation.navigate("Store")}
             >
-              <AntDesign
-                name="shoppingcart"
-                size={30}
+              <FontAwesome5
+                name="store"
+                size={24}
                 color={theme.colors.primary}
               />
             </Button>

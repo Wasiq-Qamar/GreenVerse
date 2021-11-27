@@ -193,7 +193,7 @@ const categories = [
   },
   {
     id: "fertilizers",
-    name: "fertilizers",
+    name: "Fertilizers",
     tags: ["products", "shop"],
     count: 47,
     image: require("../../assets/icons/fertilizers.png"),

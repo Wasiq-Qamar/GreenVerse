@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Dimensions,
   Image,
@@ -11,6 +11,7 @@ import { Card, Badge, Button, Block, Text } from "../components/elements";
 import { theme, mocks } from "../constants";
 const { width } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
+import { Context as ProductContext } from "../context/ProductContext";
 import { AntDesign } from "@expo/vector-icons";
 
 const CartScreen = ({ navigation }) => {
@@ -18,16 +19,31 @@ const CartScreen = ({ navigation }) => {
   const {
     state: { imageUri, userType },
   } = useContext(AuthContext);
+  const { state, setCartFromLocal } = useContext(ProductContext);
   const [quantity, setQuantity] = useState(1);
-  let amount = quantity * 500;
-
-  const handleQuantity = (num) => {
-    if (num < 0 && quantity == 0) {
-      return;
+  const [totalBill, setTotalBill] = useState(0);
+  useEffect(() => {
+    let total = 0;
+    if (state.cart) {
+      state.cart.forEach((item) => {
+        total = total + parseInt(item.quantity) * parseInt(item.price);
+        console.log(total);
+        setTotalBill(total);
+      });
     }
-    setQuantity(quantity + num);
+  }, [state.cart]);
+  const handleQuantity = (num, id) => {
+    let item = state.cart.filter((product) => product.id === id)[0];
+    if (num < 0 && item.quantity == 0) {
+      return;
+    } else {
+      let filteredCart = state.cart.filter((product) => product.id !== id);
+      item.quantity = item.quantity + num;
+      console.log(item);
+      setCartFromLocal({ cart: [...filteredCart, item] });
+    }
   };
-
+  console.log(state.cart);
   return (
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
@@ -46,60 +62,86 @@ const CartScreen = ({ navigation }) => {
         style={{ paddingVertical: theme.sizes.base * 2 }}
       >
         <Block flex={false} center middle style={styles.categories}>
-          {mocks.cartItems.map((category) => (
-            <Block key={category.name} style={{ width: width * 0.4 }}>
-              <Card row center shadow style={styles.category}>
-                <Badge
-                  margin={[0, 0, 15]}
-                  size={50}
-                  color="rgba(41,216,143,0.20)"
-                >
-                  <Image source={category.image} style={styles.image} />
-                </Badge>
-                <Block
-                  row
-                  center
-                  middle
-                  style={{ width: width * 0.7, paddingHorizontal: 15 }}
-                >
-                  <Block column style={{ width: width * 0.3 }}>
-                    <Text h3 bold>
-                      {category.name}
-                    </Text>
-                    <Text gray caption>
-                      Rs. {category.price}
-                    </Text>
+          {state.cart &&
+            state.cart.map((product, index) => (
+              <Block key={index} style={{ width: width * 0.4 }}>
+                <Card row center shadow style={styles.category}>
+                  <Badge
+                    margin={[0, 0, 15]}
+                    size={50}
+                    color="rgba(41,216,143,0.20)"
+                  >
+                    <Image
+                      source={{ uri: product.productImg }}
+                      style={styles.image}
+                    />
+                  </Badge>
+                  <Block
+                    row
+                    center
+                    middle
+                    style={{ width: width * 0.7, paddingHorizontal: 15 }}
+                  >
+                    <Block column style={{ width: width * 0.3 }}>
+                      <Text h3 bold>
+                        {product.productName}
+                      </Text>
+                      <Text gray caption>
+                        Rs. {product.price}
+                      </Text>
+                    </Block>
                   </Block>
-                  <Block middle center row>
+                  <Block
+                    middle
+                    center
+                    row
+                    style={{ borderColor: "black", borderWidth: 2 }}
+                  >
                     <Button
                       style={[styles.iconButton, { marginRight: 15 }]}
-                      onPress={() => handleQuantity(-1)}
+                      onPress={() => handleQuantity(-1, product.id)}
                     >
-                      <AntDesign name="minus" size={24} color="white" />
+                      <AntDesign
+                        name="minus"
+                        size={24}
+                        color={theme.colors.primary}
+                      />
                     </Button>
-                    <Text>Quantity: {quantity}</Text>
+                    <Text>{product.quantity}</Text>
                     <Button
                       style={[styles.iconButton, { marginLeft: 15 }]}
-                      onPress={() => handleQuantity(1)}
+                      onPress={() => handleQuantity(1, product.id)}
                     >
-                      <AntDesign name="plus" size={24} color="white" />
+                      <AntDesign
+                        name="plus"
+                        size={24}
+                        color={theme.colors.primary}
+                      />
                     </Button>
                   </Block>
-                </Block>
-              </Card>
+                </Card>
+              </Block>
+            ))}
+          {state.cart ? (
+            <Block center middle row>
+              <Text h2 bold style={{ width: width * 0.3 }}>
+                Total Payment:
+              </Text>
+              <Text h3>{totalBill}</Text>
             </Block>
-          ))}
-          <Block center middle row>
-            <Text h2 bold style={{ width: width * 0.3 }}>
-              Total Payment:
-            </Text>
-            <Text h3>{amount}</Text>
-          </Block>
+          ) : (
+            <Block center middle row>
+              <Text h2 style={{ width: width * 0.3 }}>
+                Cart is empty
+              </Text>
+            </Block>
+          )}
         </Block>
         <Block middle center>
           <Button
             style={styles.button}
-            onPress={() => navigation.navigate("Checkout", { amount })}
+            onPress={() => navigation.navigate("Checkout", { totalBill })}
+            disabled={!state.cart}
           >
             <Text h3 bold style={{ width: width * 0.17 }}>
               Checkout
@@ -144,11 +186,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   iconButton: {
-    backgroundColor: theme.colors.primary,
     width: width * 0.07,
     height: width * 0.07,
     alignItems: "center",
-    borderRadius: 15,
   },
 });
 export default CartScreen;

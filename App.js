@@ -38,7 +38,9 @@ import { Provider as AuthProvider } from "./src/context/AuthContext";
 import { Provider as TaskProvider } from "./src/context/TaskContext";
 import { Provider as DonationProvider } from "./src/context/DonationContext";
 import { Provider as OrderProvider } from "./src/context/OrderContext";
+import { Provider as ProductProvider } from "./src/context/ProductContext";
 import { Context as AuthContext } from "./src/context/AuthContext";
+import { Context as ProductContext } from "./src/context/ProductContext";
 
 //ICONS
 import { Ionicons } from "@expo/vector-icons";
@@ -228,6 +230,7 @@ const Store = () => {
 
 function App() {
   const { clearIsLoading, tryLocalSignin, state } = useContext(AuthContext);
+  const { setCartFromLocal } = useContext(ProductContext);
   let token;
 
   useEffect(() => {
@@ -236,6 +239,12 @@ function App() {
         token = await AsyncStorage.getItem("token");
         if (token) {
           tryLocalSignin({ token });
+          // let cart = await AsyncStorage.getItem("cart");
+          // if (cart && cart.length > 0) {
+          //   setCartFromLocal({ cart: JSON.parse(cart) });
+          // } else {
+          //   setCartFromLocal({ cart: [] });
+          // }
         } else {
           clearIsLoading();
         }
@@ -290,13 +299,15 @@ function App() {
 export default () => {
   return (
     <OrderProvider>
-      <DonationProvider>
-        <TaskProvider>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </TaskProvider>
-      </DonationProvider>
+      <ProductProvider>
+        <DonationProvider>
+          <TaskProvider>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </TaskProvider>
+        </DonationProvider>
+      </ProductProvider>
     </OrderProvider>
   );
 };

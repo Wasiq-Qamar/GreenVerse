@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dimensions,
   Image,
@@ -6,24 +6,36 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Card, Badge, Button, Block, Text } from "../components/elements";
 import { theme, mocks } from "../constants";
 const { width } = Dimensions.get("window");
-import { Context as AuthContext } from "../context/AuthContext";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Context as ProductContext } from "../context/ProductContext";
+import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 
-const ExploreScreen = ({ navigation }) => {
+const ExploreScreen = ({ route, navigation }) => {
+  const { category, categoryName } = route.params;
   const categories = mocks.volunteerCategories;
-  const {
-    state: { imageUri, userType },
-  } = useContext(AuthContext);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    async function getProducts() {
+      let result = await AsyncStorage.getItem("products");
+      result = JSON.parse(result);
+      let filteredProducts = result.filter(
+        (item) => item.category === category
+      );
+      setProducts(filteredProducts);
+    }
+
+    getProducts();
+  }, []);
 
   return (
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
         <Text primary h1 bold>
-          Explore.
+          Explore {categoryName}
         </Text>
         <Block flex={false} row>
           <Button onPress={() => navigation.navigate("Settings")}>
@@ -36,40 +48,37 @@ const ExploreScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         style={{ paddingVertical: theme.sizes.base * 2 }}
       >
-        <Block flex={false} row middle style={styles.categories}>
-          {mocks.products.map((category) => (
+        <Block flex={false} row middle style={styles.products}>
+          {products.map((product, index) => (
             <TouchableOpacity
-              key={category.name}
-              style={{ width: width * 0.4 }}
+              key={product.name}
+              style={{ width: width * 0.4, marginHorizontal: 5 }}
               onPress={() =>
                 navigation.navigate("ProductDescription", {
-                  name: category.name,
-                  price: category.price,
-                  image: category.image,
+                  product: product,
                 })
               }
+              key={index}
             >
-              <Card center middle shadow style={styles.category}>
+              <Card center middle shadow style={styles.product}>
                 <Badge
                   margin={[0, 0, 15]}
                   size={130}
                   color="rgba(41,216,143,0.20)"
                 >
-                  <Image source={category.image} style={styles.image} />
+                  <Image
+                    source={{ uri: product.productImg }}
+                    style={styles.image}
+                  />
                 </Badge>
                 <Block row center>
-                  <Block column style={{ width: width * 0.3 }}>
+                  <Block column>
                     <Text h3 bold>
-                      {category.name}
+                      {product.productName}
                     </Text>
                     <Text gray caption>
-                      Rs. {category.price}
+                      Rs. {product.price}
                     </Text>
-                  </Block>
-                  <Block padding={[0, 0, 0, 15]}>
-                    <Button style={styles.button}>
-                      <Text caption>+ Add to Cart</Text>
-                    </Button>
                   </Block>
                 </Block>
               </Card>
@@ -90,9 +99,9 @@ const styles = StyleSheet.create({
     width: theme.sizes.base * 3,
     borderRadius: 50,
   },
-  categories: {
+  products: {
     flexWrap: "wrap",
-    paddingHorizontal: theme.sizes.base * 2,
+    paddingHorizontal: theme.sizes.base * 1,
     marginBottom: theme.sizes.base * 3.5,
   },
   category: {
@@ -110,9 +119,14 @@ const styles = StyleSheet.create({
   },
   image: { width: 150, height: 140 },
   button: {
-    backgroundColor: theme.colors.accent,
-    width: width * 0.15,
+    backgroundColor: theme.colors.white,
+    width: width * 0.08,
+    height: width * 0.08,
     alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.2)",
   },
 });
 export default ExploreScreen;

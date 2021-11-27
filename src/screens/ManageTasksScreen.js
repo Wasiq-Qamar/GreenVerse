@@ -69,13 +69,18 @@ const ManageTasksScreen = ({ navigation }) => {
           </DataTable.Header>
           {tasks.map((task, index) => (
             <TouchableOpacity
-              // onPress={() =>
-              //   navigation.navigate("TaskChannel", {
-              //     name: task.organization,
-              //     amount: task.amount,
-              //     date: task.taskDate.split("T")[0],
-              //   })
-              // }
+              onPress={() =>
+                navigation.navigate("TaskChannel", {
+                  campaign: task.campaign,
+                  manager: task.manager.userName,
+                  description: task.description,
+                  location: task.location,
+                  fromTime: task.fromTime,
+                  toTime: task.toTime,
+                  peopleNeeded: task.peopleNeeded,
+                  peopleEnlisted: task.peopleEnlisted,
+                })
+              }
               key={task._id}
             >
               <DataTable.Row
