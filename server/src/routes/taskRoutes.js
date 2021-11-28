@@ -127,6 +127,16 @@ router.get("/user/tasks/:userId", async (req, res) => {
   try {
     const user = await User.findById(userId).populate({
       path: "tasks.task",
+      populate: [
+        {
+          path: "manager",
+          select: "userName email",
+        },
+        {
+          path: "peopleEnlisted.user",
+          select: "userName email",
+        },
+      ],
     });
 
     res.send(user.tasks);
@@ -189,7 +199,16 @@ router.patch("/task/:id/enlist", async (req, res) => {
         new: true,
       }
     );
-    res.send(result);
+    const resultToSend = await Task.findById(id)
+      .populate({
+        path: "manager",
+        select: "userName email contact image",
+      })
+      .populate({
+        path: "peopleEnlisted.user",
+        select: "_id userName email contact image",
+      });
+    res.send(resultToSend);
   } catch (err) {
     console.log(err);
     return res.status(422).send(err);
@@ -209,7 +228,7 @@ router.patch("/task/:id/remove", async (req, res) => {
     const user = await User.findById(userId);
 
     let userTasks = user.tasks;
-    userTasks = userTasks.filter((item) => item.task == id);
+    userTasks = userTasks.filter((item) => item.task != id);
     await User.findByIdAndUpdate(userId, { tasks: userTasks }, { new: true });
     const task = await Task.findById(id);
     let peopleEnlisted = task.peopleEnlisted;
@@ -221,7 +240,16 @@ router.patch("/task/:id/remove", async (req, res) => {
         new: true,
       }
     );
-    res.send(result);
+    const resultToSend = await Task.findById(id)
+      .populate({
+        path: "manager",
+        select: "userName email contact image",
+      })
+      .populate({
+        path: "peopleEnlisted.user",
+        select: "_id userName email contact image",
+      });
+    res.send(resultToSend);
   } catch (err) {
     console.log(err);
     return res.status(422).send(err);
@@ -251,7 +279,16 @@ router.patch("/task/:id/job", async (req, res) => {
         new: true,
       }
     );
-    res.send(result);
+    const resultToSend = await Task.findById(id)
+      .populate({
+        path: "manager",
+        select: "userName email contact image",
+      })
+      .populate({
+        path: "peopleEnlisted.user",
+        select: "_id userName email contact image",
+      });
+    res.send(resultToSend);
   } catch (err) {
     return res.status(422).send(err);
   }

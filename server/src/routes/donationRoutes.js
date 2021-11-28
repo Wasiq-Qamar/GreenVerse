@@ -49,14 +49,14 @@ router.get("/donations", async (req, res) => {
   }
 });
 
-router.get("/user/donations", async (req, res) => {
-  // const { userId } = req.body;
+router.get("/user/donations/:userId", async (req, res) => {
+  const { userId } = req.params;
   // console.log(userId);
   try {
     let donations = await Donation.find();
-    // donations = donations.filter((item) => item.userId === userId);
+    donations = donations.filter((item) => item.userId !== userId);
     res.send(donations);
-    console.log(donations);
+    // console.log(donations);
   } catch (err) {
     console.log(err);
     return res.status(422).send(err);

@@ -32,6 +32,9 @@ const orderSchema = new mongoose.Schema({
   city: {
     type: String,
   },
+  contact: {
+    type: String,
+  },
   orderDate: {
     type: Date,
     default: Date.now(),
