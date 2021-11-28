@@ -20,7 +20,13 @@ const TasksListScreen = ({ route, navigation }) => {
   const {
     state: { imageUri, userId, email },
   } = useContext(AuthContext);
-  const { state, fetchTasks, enlistInTask } = useContext(TaskContext);
+  const {
+    state: { tasks },
+    fetchTasks,
+    enlistInTask,
+  } = useContext(TaskContext);
+
+  // console.log(tasks);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -28,7 +34,7 @@ const TasksListScreen = ({ route, navigation }) => {
       else if (type === "Recycle") setTypeToShow("garbageRecycling");
       else setTypeToShow(type);
       fetchTasks();
-    }, [])
+    }, [tasks])
   );
 
   const checkPeopleEnlisted = (arr, taskId) => {
@@ -64,7 +70,7 @@ const TasksListScreen = ({ route, navigation }) => {
         style={{ paddingVertical: theme.sizes.base * 2 }}
       >
         <Block flex={false} column space="between" style={styles.tasks}>
-          {state.tasks
+          {tasks
             .filter((item) => item.campaign === typeToShow)
             .map((item, index) => (
               <TouchableOpacity
@@ -142,7 +148,9 @@ const TasksListScreen = ({ route, navigation }) => {
                         style={{ width: width * 0.35 }}
                         color={theme.colors.accent}
                         right
-                        onPress={() => enlistInTask(item._id, userId)}
+                        onPress={() => {
+                          enlistInTask(item._id, userId);
+                        }}
                       >
                         <Text bold white center>
                           Enlist

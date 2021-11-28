@@ -15,8 +15,9 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Context as AuthContext } from "../context/AuthContext";
-import { Context as TaskContext } from "../context/TaskContext";
-import { Context as DonationContext } from "../context/DonationContext";
+// import { Context as TaskContext } from "../context/TaskContext";
+// import { Context as DonationContext } from "../context/DonationContext";
+// import { Context as OrderContext } from "../context/OrderContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -34,8 +35,9 @@ const SettingsScreen = ({ navigation }) => {
     signout,
     updateInfo,
   } = useContext(AuthContext);
-  const { fetchTasks, fetchMyTasks } = useContext(TaskContext);
-  const { fetchDonations } = useContext(DonationContext);
+  // const { fetchMyTasks } = useContext(TaskContext);
+  // const { fetchDonations } = useContext(DonationContext);
+  // const { fetchOrders } = useContext(OrderContext);
 
   const [newUserName, setName] = useState(userName);
   const [newEmail, setEmail] = useState(email);
@@ -47,11 +49,13 @@ const SettingsScreen = ({ navigation }) => {
     updateInfo(newUserName, newEmail, newContact, userId);
   };
 
-  useEffect(() => {
-    fetchMyTasks(userId);
-    fetchTasks();
-    fetchDonations({ userId });
-  }, []);
+  // useEffect(() => {
+  //   fetchMyTasks(userId);
+  //   fetchDonations({ userId });
+  //   fetchOrders({ userId });
+  // }, []);
+
+  // console.log(state.myTasks);
 
   return (
     <Block white paddingTop={50}>

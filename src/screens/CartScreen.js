@@ -30,6 +30,8 @@ const CartScreen = ({ navigation }) => {
         console.log(total);
         setTotalBill(total);
       });
+    } else {
+      setTotalBill(0);
     }
   }, [state.cart]);
   const handleQuantity = (num, id) => {
@@ -43,7 +45,7 @@ const CartScreen = ({ navigation }) => {
       setCartFromLocal({ cart: [...filteredCart, item] });
     }
   };
-  console.log(state.cart);
+  // console.log(state.cart);
   return (
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>

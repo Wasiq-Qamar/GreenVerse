@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -24,15 +24,56 @@ import Spacer from "../components/Spacer";
 import { theme, mocks } from "../constants";
 const { width } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
+import { Context as OrderContext } from "../context/OrderContext";
+import { Context as ProductContext } from "../context/ProductContext";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 const ConfirmCheckoutScreen = ({ route, navigation }) => {
   const today = new Date(Date.now());
-  const { totalBill, method, cardNumber, name, address, zipcode, city } =
-    route.params;
   const {
-    state: { imageUri },
+    totalBill,
+    method,
+    cardNumber,
+    name,
+    address,
+    zipcode,
+    city,
+    number,
+  } = route.params;
+  const {
+    state: { imageUri, userId },
   } = useContext(AuthContext);
+  const { placeOrder } = useContext(OrderContext);
+  const {
+    state: { cart },
+    setCartFromLocal,
+  } = useContext(ProductContext);
+
+  const handlePlaceOrder = () => {
+    let ids = [];
+    cart.forEach((item) => {
+      ids = [...ids, item.id];
+    });
+
+    // console.log(ids);
+    placeOrder(
+      {
+        userId: userId,
+        productId: ids,
+        method: method,
+        amount: totalBill,
+        cardNumber: cardNumber,
+        address: address,
+        zipcode: zipcode,
+        city: city,
+        contact: number,
+      },
+      navigation.navigate("Cart")
+    );
+
+    setCartFromLocal({ cart: [] });
+  };
+
   return (
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
@@ -47,7 +88,7 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
         <Block flex={false} row center space="between" margin={[0, 0, 10, 0]}>
           <Block flex={1.5}>
             <Text left primary>
-              Total Bill:
+              Total Billllll:
             </Text>
           </Block>
           <Block flex={7}>
@@ -113,6 +154,19 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
           <Block flex={false} row center space="between" margin={[0, 0, 10, 0]}>
             <Block flex={1.5}>
               <Text left primary>
+                Phone Number:
+              </Text>
+            </Block>
+            <Block flex={7}>
+              <Text h3 bold primary>
+                {number}
+              </Text>
+            </Block>
+          </Block>
+
+          <Block flex={false} row center space="between" margin={[0, 0, 10, 0]}>
+            <Block flex={1.5}>
+              <Text left primary>
                 Address:
               </Text>
             </Block>
@@ -155,7 +209,7 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
             <Button
               style={{ width: width * 0.4 }}
               color={theme.colors.primary}
-              onPress={() => navigation.navigate("Cart")}
+              onPress={handlePlaceOrder}
             >
               <Text h3 center white bold>
                 Confirm Order

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Image,
   StyleSheet,
@@ -17,12 +17,17 @@ const { width, height } = Dimensions.get("window");
 
 const ManageDonationScreen = ({ navigation }) => {
   const {
-    state: { imageUri, userName, userId, userType },
+    state: { imageUri, userId },
     signout,
   } = useContext(AuthContext);
   const {
     state: { donations },
+    fetchDonations,
   } = useContext(DonationContext);
+
+  useEffect(() => {
+    fetchDonations({ userId });
+  }, []);
 
   // const donations = [
   //   {

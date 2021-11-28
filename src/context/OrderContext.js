@@ -16,8 +16,9 @@ const fetchOrders =
   (dispatch) =>
   async ({ userId }) => {
     try {
-      const res = await greenverseApi.get("/user/orders", { userId });
+      const res = await greenverseApi.get(`/user/orders/${userId}`);
       dispatch({ type: "fetch_orders", payload: res.data });
+      // console.log(res.data);
     } catch (err) {
       console.log(err);
     }
@@ -35,8 +36,7 @@ const placeOrder =
       address,
       zipcode,
       city,
-      orderDate,
-      completed,
+      contact,
     },
     callback
   ) => {
@@ -50,8 +50,7 @@ const placeOrder =
         address,
         zipcode,
         city,
-        orderDate,
-        completed,
+        contact,
       });
       // dispatch({ type: "create_task", payload: res.data });
       if (callback) {

@@ -30,13 +30,13 @@ const CheckoutScreen = ({ route, navigation }) => {
   const today = new Date(Date.now());
   const [method, setMethod] = useState("");
   const [cardNumber, setCardNumber] = useState("");
-  const [cardExpiry, setCardExpiry] = useState();
-  const [cardCvv, setCardCvv] = useState();
-  const [name, setName] = useState();
-  const [address, setAddress] = useState();
-  const [zipcode, setZipcode] = useState();
-  const [city, setCity] = useState();
-  const [number, setNumber] = useState();
+  const [cardExpiry, setCardExpiry] = useState("");
+  const [cardCvv, setCardCvv] = useState("");
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [zipcode, setZipcode] = useState("");
+  const [city, setCity] = useState("");
+  const [number, setNumber] = useState("");
 
   const { totalBill } = route.params;
   const {
@@ -257,10 +257,12 @@ const CheckoutScreen = ({ route, navigation }) => {
                 color={theme.colors.primary}
                 disabled={
                   (method === "Debit Card" && cardNumber == "") ||
-                  name == "" ||
-                  address == "" ||
-                  zipcode == "" ||
-                  city == ""
+                  method === "" ||
+                  name === "" ||
+                  address === "" ||
+                  zipcode === "" ||
+                  city === "" ||
+                  number === ""
                     ? true
                     : false
                 }

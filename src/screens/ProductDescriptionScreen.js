@@ -22,7 +22,7 @@ const ProductDescriptionScreen = ({ route, navigation }) => {
   const {
     state: { imageUri, userType },
   } = useContext(AuthContext);
-  const { addToCart } = useContext(ProductContext);
+  const { addToCart, state } = useContext(ProductContext);
   const [quantity, setQuantity] = useState(0);
 
   const handleQuantity = (num) => {
@@ -31,6 +31,8 @@ const ProductDescriptionScreen = ({ route, navigation }) => {
     }
     setQuantity(quantity + num);
   };
+
+  // console.log("CART: ", state.cart);
 
   const addItemToCart = (item) => {
     const product = {

@@ -25,6 +25,7 @@ import { Context as TaskContext } from "../context/TaskContext";
 
 const TaskChannelScreen = ({ route, navigation }) => {
   const {
+    taskId,
     campaign,
     manager,
     description,
@@ -32,28 +33,41 @@ const TaskChannelScreen = ({ route, navigation }) => {
     fromTime,
     toTime,
     peopleNeeded,
-    peopleEnlisted,
   } = route.params;
   const [name, setName] = useState(route.params.name);
   const [date, setDate] = useState(route.params.date);
+  const [peopleEnlisted, setPeopleEnlisted] = useState(
+    route.params.peopleEnlisted
+  );
+  const [selectedUser, setSelectedUser] = useState("");
+
   const {
-    state: { imageUri, email },
+    state: { imageUri, email, userId },
   } = useContext(AuthContext);
-  const { state } = useContext(TaskContext);
-  const [users, setUsers] = useState([
-    "Wasiq Qamar",
-    "Sufyan Khan",
-    "Other User",
-    "Test User",
-  ]);
+  const { state, assignJob, removeFromTask } = useContext(TaskContext);
 
   const [changePicture, setChangePicture] = useState(false);
   const [image, setImage] = useState(null);
+  const [jobText, setJobText] = useState("");
 
   const [showAlertJob, setShowAlertJob] = useState(false);
   const [showAlertImage, setShowAlertImage] = useState(false);
   const [showAlertUser, setShowAlertUser] = useState(false);
   const [showAlertEdit, setShowAlertEdit] = useState(false);
+
+  const handleAssignJob = () => {
+    setShowAlertJob(!showAlertJob);
+    assignJob({ id: taskId, userId, job: jobText });
+  };
+
+  const handleRemoveUser = () => {
+    let filteredUsers = peopleEnlisted.filter(
+      (item) => item.user._id !== selectedUser
+    );
+    setPeopleEnlisted(filteredUsers);
+    setShowAlertUser(!showAlertUser);
+    removeFromTask({ id: taskId, userId: selectedUser });
+  };
 
   return (
     <Block white>
@@ -203,7 +217,10 @@ const TaskChannelScreen = ({ route, navigation }) => {
                       <Button
                         style={[styles.userButtons, { marginTop: -15 }]}
                         color={theme.colors.primary}
-                        onPress={() => setShowAlertUser(!showAlertUser)}
+                        onPress={() => {
+                          setSelectedUser(item.user._id);
+                          setShowAlertUser(!showAlertUser);
+                        }}
                       >
                         <Text h4 white center style>
                           <AntDesign
@@ -236,6 +253,7 @@ const TaskChannelScreen = ({ route, navigation }) => {
             <Input
               placeholder="Type Job description here..."
               style={{ width: width * 0.7, paddingHorizontal: 15 }}
+              onChangeText={setJobText}
             />
           </>
         }
@@ -250,9 +268,7 @@ const TaskChannelScreen = ({ route, navigation }) => {
         onCancelPressed={() => {
           setShowAlertJob(!showAlertJob);
         }}
-        onConfirmPressed={() => {
-          setShowAlertJob(!showAlertJob);
-        }}
+        onConfirmPressed={handleAssignJob}
         contentContainerStyle={{ width: width * 0.8 }}
       />
 
@@ -305,10 +321,7 @@ const TaskChannelScreen = ({ route, navigation }) => {
         onCancelPressed={() => {
           setShowAlertUser(!showAlertUser);
         }}
-        onConfirmPressed={() => {
-          setUsers(users.filter((user) => user !== "Wasiq Qamar"));
-          setShowAlertUser(!showAlertUser);
-        }}
+        onConfirmPressed={handleRemoveUser}
         contentContainerStyle={{ width: width * 0.8 }}
       />
 

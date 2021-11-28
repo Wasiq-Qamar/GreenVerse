@@ -1,29 +1,33 @@
-import React, { useState, useContext, useEffect } from "react";
+import { SimpleLineIcons } from "@expo/vector-icons";
+import React, { useContext, useState, useEffect } from "react";
 import {
-  Image,
-  StyleSheet,
-  ScrollView,
   Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { Button, Block, Text } from "../components/elements";
+import { DataTable } from "react-native-paper";
+import { Block, Button, Text } from "../components/elements";
 import { theme } from "../constants";
-import { SimpleLineIcons } from "@expo/vector-icons";
 import { Context as AuthContext } from "../context/AuthContext";
 import { Context as TaskContext } from "../context/TaskContext";
-import { DataTable } from "react-native-paper";
-
-const { width, height } = Dimensions.get("window");
 
 const ManageTasksScreen = ({ navigation }) => {
-  const [currentUserTasks, setCurrentUserTasks] = useState([]);
   const {
     state: { imageUri, userId },
     signout,
   } = useContext(AuthContext);
   const {
-    state: { tasks },
+    state: { myTasks, tasks },
+    fetchMyTasks,
   } = useContext(TaskContext);
+
+  // console.log(myTasks);
+
+  useEffect(() => {
+    fetchMyTasks(userId);
+  }, [tasks]);
 
   return (
     <Block white paddingTop={20}>
@@ -67,38 +71,40 @@ const ManageTasksScreen = ({ navigation }) => {
             </DataTable.Title>
             <DataTable.Title style={{ flex: 1.5 }}> Date </DataTable.Title>
           </DataTable.Header>
-          {tasks.map((task, index) => (
+          {myTasks.map((task, index) => (
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate("TaskChannel", {
-                  campaign: task.campaign,
-                  manager: task.manager.userName,
-                  description: task.description,
-                  location: task.location,
-                  fromTime: task.fromTime,
-                  toTime: task.toTime,
-                  peopleNeeded: task.peopleNeeded,
-                  peopleEnlisted: task.peopleEnlisted,
+                  taskId: task.task._id,
+                  campaign: task.task.campaign,
+                  manager: task.task.manager.userName,
+                  description: task.task.description,
+                  location: task.task.location,
+                  fromTime: task.task.fromTime,
+                  toTime: task.task.toTime,
+                  peopleNeeded: task.task.peopleNeeded,
+                  peopleEnlisted: task.task.peopleEnlisted,
+                  date: task.task.date,
                 })
               }
               key={task._id}
             >
               <DataTable.Row
-                key={task.id}
+                key={task._id}
                 style={index % 2 === 0 ? styles.evenRow : null}
               >
                 <DataTable.Title style={{ flex: 2 }}>
                   {" "}
-                  {task.taskName}{" "}
+                  {task.task.taskName}{" "}
                 </DataTable.Title>
                 <DataTable.Title style={{ flex: 2 }}>
-                  {task.manager.userName}
+                  {task.task.manager.userName}
                 </DataTable.Title>
                 <DataTable.Title style={{ flex: 1.5 }}>
-                  {task.peopleEnlisted.length}
+                  {task.task.peopleEnlisted.length}
                 </DataTable.Title>
                 <DataTable.Title style={{ flex: 1.5 }}>
-                  {task.date}
+                  {task.task.date}
                 </DataTable.Title>
               </DataTable.Row>
             </TouchableOpacity>

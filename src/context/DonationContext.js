@@ -15,12 +15,12 @@ const donationReducer = (state, action) => {
 const fetchDonations =
   (dispatch) =>
   async ({ userId }) => {
-    console.log(userId);
+    // console.log(userId);
     try {
-      const res = await greenverseApi.get("/user/donations");
-      let donations = res.data.filter((item) => item.userId === userId);
-      dispatch({ type: "fetch_donations", payload: donations });
-      console.log("Donations: ", donations);
+      const res = await greenverseApi.get(`/user/donations/${userId}`);
+      // let donations = res.data.filter((item) => item.userId === userId);
+      dispatch({ type: "fetch_donations", payload: res.data });
+      // console.log("Donations: ", res.data);
     } catch (err) {
       console.log(err);
     }

@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const productReducer = (state, action) => {
   switch (action.type) {
     case "fetch_products":
-      return { prodcuts: [...action.payload] };
+      return { ...state, prodcuts: [...action.payload] };
     case "add_to_cart":
       return { ...state, cart: [...state.cart, action.payload] };
     case "set_cart":
