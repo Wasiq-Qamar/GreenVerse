@@ -93,6 +93,8 @@ const ManageDonationScreen = ({ navigation }) => {
                   name: donation.organization,
                   amount: donation.amount,
                   date: donation.donationDate.split("T")[0],
+                  progress: donation.progress,
+                  id: donation._id,
                 })
               }
               key={donation._id}
@@ -115,7 +117,9 @@ const ManageDonationScreen = ({ navigation }) => {
                 </DataTable.Title>
                 <DataTable.Title style={{ flex: 1.5 }}>
                   {" "}
-                  {donation.donationDate.split("T")[0]}{" "}
+                  {donation.donationDate
+                    ? donation.donationDate.split("T")[0]
+                    : "N/A"}{" "}
                 </DataTable.Title>
               </DataTable.Row>
             </TouchableOpacity>

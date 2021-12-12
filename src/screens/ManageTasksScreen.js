@@ -23,11 +23,11 @@ const ManageTasksScreen = ({ navigation }) => {
     fetchMyTasks,
   } = useContext(TaskContext);
 
-  // console.log(myTasks);
-
   useEffect(() => {
     fetchMyTasks(userId);
   }, [tasks]);
+
+  console.log(myTasks);
 
   return (
     <Block white paddingTop={20}>
@@ -85,6 +85,8 @@ const ManageTasksScreen = ({ navigation }) => {
                   peopleNeeded: task.task.peopleNeeded,
                   peopleEnlisted: task.task.peopleEnlisted,
                   date: task.task.date,
+                  taskName: task.task.taskName,
+                  messages: task.task.messages,
                 })
               }
               key={task._id}
@@ -98,7 +100,9 @@ const ManageTasksScreen = ({ navigation }) => {
                   {task.task.taskName}{" "}
                 </DataTable.Title>
                 <DataTable.Title style={{ flex: 2 }}>
-                  {task.task.manager.userName}
+                  {task.task.manager.userName
+                    ? task.task.manager.userName
+                    : "N/A"}
                 </DataTable.Title>
                 <DataTable.Title style={{ flex: 1.5 }}>
                   {task.task.peopleEnlisted.length}

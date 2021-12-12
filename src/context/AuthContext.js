@@ -10,6 +10,7 @@ const authReducer = (state, action) => {
       return { ...state, isLoading: false };
     case "signin":
       return {
+        ...state,
         errorMessage: "",
         token: action.payload.token,
         email: action.payload.email,
@@ -40,7 +41,7 @@ const authReducer = (state, action) => {
     case "clear_error_message":
       return { ...state, errorMessage: "" };
     case "signout":
-      return { token: null, errorMessage: "", isLoading: false };
+      return { ...state, token: null, errorMessage: "", isLoading: false };
     default:
       return state;
   }

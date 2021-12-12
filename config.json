@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "greenverse-search",
+  "private_key_id": "17daf17d12f0390e7ed50ee7deb096ac8437e797",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDO9nD4NT0My/ai\nx3N7AU8q9KTGbxEW68RozuaXx51rLr//M1wESjI6j7QVVEcu/sg+keVm97nU5b0T\n+OJnqyvV0f54sOoN44YF5CfMKmJ0KbSr6uu996DMRrI53kwTRlO9l/dS9DpniiM6\nzetU1eUojZ86vqTiWYJd87ERlb/5F92+LkZXHgrdoHpzyWCpyXeWVJKAJqrPU720\n1hifStufCmEjQ0qSFXvjyygxFsMj310CvOvRzC1hZES4iC11xTTo9zLxnGCzMXbL\nrr1C4RIMIQ1G0gqljIB5/BWS7R/iCE/qpdWnUunaxT9zbb4miOzU1Y7LS9n1oquN\nIg4u7hu5AgMBAAECggEARNxXcyZXlUHp4nhFUph5bFvw1TtQLtWsSIkKzVZz6J0p\n8bH3fE/pjXWR4ATmGFtaagMmFk/3a0AzXIlTX1XjJGYV6rdGcO+SgLRMj5BMqMTV\nodvsqwzQ2hbtpvZxTnp4U11UQ6wSILAkD6VDFzuB3y/b2nJjLxLEHxl9gVHXiXuP\nlhCIU5EDh3uFmAN9koNa1cetQY8RdUD161mo5JRPrXKFmHEQLWzOET+w+0C8CIOx\nrFWrpr87tXVLNFQxsdjnJ/RV0FgzM/IWy7eQMVaJe4Xfgo30GdGxzZT4EkzPYvmz\n5bNek+wk/hB/rcYP5NzSj08JKml2REUyZ+szAZSLhwKBgQDvsQNhM4h8KSlUBmnH\nL00D3TvmYAsPVR7YsRRPfpQWiOA6AShIENe5ISZ/EJVL6c+YpvgcZPN37XOneooz\nUcwxSqc4BPOaMBF2OcUEqQ8hS6Sxkcl7wWJbrFKkxRe69z9dUEliZ9YzuzKO7mlS\nx0UgKWw10OCzZdFFFC/wjZu9+wKBgQDdC1oxCzgp0mJ2iqoE9aWpakFVf3albGIv\noyh00yTyvzP2FVGQnRzS6IUQsAPOticCpUIVccdbfF6KkWg4KczxCRDWpS9esrpY\n5LlMxMfODxx+W+0SmFNbLLZ+b+PloIKCGqMHW7+8qoARGMgsPwYZme3mbhrFARTh\ncYBTPQHi2wKBgBD4V2TqYR9pSqPIUHTpxGohn7wP0LilLinpX6bBL3ro9fclXdS8\nXIme7zrP0cIuK6SDLc3U1+gFx8pzwpUflXVn867jqtufy5yzOl+6GHgjAuYPjFRW\nvMAA01kXGzcBilrw9EEjWOcQueOkvZA+y4YbaK3mvAH3k3lwlHRTklNBAoGBANwl\nrUsBKIuGjCgRzGkqGjbTq4QycYEpo9RcBDPuAnN9eIvTCawkvgtUJwrKstASXGHn\nIxzmd62m/SW20fx1rTY2WD3ewIHpMWzNR7uslG6mYDN87G1Dpmk86/ibCXeuV6yq\nSMpQV3LYwLnGW76tei7PPr/r0t94R0qM10iPjyxXAoGAWHbAhStNAk8Hg57ozHNe\n4G6Hw3i95E0z+p5Ddg3PSAP8yiVcMgGsv3YKd7EIQrc0PDZf5cpzadz+LPXBsXqv\nitJoJ+ADPyEOD04e57qb0NLJHkkFZfA2Dw73vJ0i9CEYZdFi2aGuHFenxgO1H/Wk\n/cXqg157cZaHC3Iqh+kGf1c=\n-----END PRIVATE KEY-----\n",
+  "client_email": "dialogfloe-helper@greenverse-search.iam.gserviceaccount.com",
+  "client_id": "109084922992057318034",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dialogfloe-helper%40greenverse-search.iam.gserviceaccount.com"
+}

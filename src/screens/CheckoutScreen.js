@@ -106,60 +106,6 @@ const CheckoutScreen = ({ route, navigation }) => {
             </Block>
           </Block>
 
-          {method === "Debit Card" ? (
-            <>
-              <Divider margin={[theme.sizes.base, theme.sizes.base]} />
-              <Block flex={false} row center space="between">
-                <Block flex={1.5}>
-                  <Text left primary>
-                    Card Number:
-                  </Text>
-                </Block>
-                <Block flex={7}>
-                  <Input
-                    defaultValue={cardNumber}
-                    style={styles.input}
-                    onChangeText={setCardNumber}
-                    placeholder="Enter Card Number"
-                    number
-                  />
-                </Block>
-              </Block>
-
-              <Block flex={false} row center space="between">
-                <Block flex={1.5}>
-                  <Text left primary>
-                    Expiry Date:
-                  </Text>
-                </Block>
-                <Block flex={3.5}>
-                  <Input
-                    defaultValue={cardExpiry}
-                    style={[styles.input, { width: width * 0.3 }]}
-                    onChangeText={setCardExpiry}
-                    placeholder=" Card Expiry Date"
-                    number
-                  />
-                </Block>
-
-                <Block flex={1}>
-                  <Text left primary>
-                    CVV Code:
-                  </Text>
-                </Block>
-                <Block flex={2.5}>
-                  <Input
-                    defaultValue={cardCvv}
-                    style={[styles.input, { width: width * 0.24 }]}
-                    onChangeText={setCardCvv}
-                    placeholder=" CVV Code"
-                    number
-                  />
-                </Block>
-              </Block>
-            </>
-          ) : method === "Cash On Delivery" ? null : null}
-
           <Divider margin={[theme.sizes.base, theme.sizes.base]} />
 
           <Block flex={false} left>
@@ -256,7 +202,6 @@ const CheckoutScreen = ({ route, navigation }) => {
                 style={{ width: width * 0.4 }}
                 color={theme.colors.primary}
                 disabled={
-                  (method === "Debit Card" && cardNumber == "") ||
                   method === "" ||
                   name === "" ||
                   address === "" ||

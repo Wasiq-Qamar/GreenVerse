@@ -6,7 +6,7 @@ const orderReducer = (state, action) => {
     // case "create_task":
     //   return { ...state, tasks: [...state.tasks, action.payload] };
     case "fetch_orders":
-      return { orders: [...action.payload] };
+      return { ...state, orders: [...action.payload] };
     default:
       return state;
   }
@@ -18,7 +18,7 @@ const fetchOrders =
     try {
       const res = await greenverseApi.get(`/user/orders/${userId}`);
       dispatch({ type: "fetch_orders", payload: res.data });
-      // console.log(res.data);
+      console.log(res.data);
     } catch (err) {
       console.log(err);
     }

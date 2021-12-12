@@ -7,6 +7,8 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { FAB } from "react-native-elements";
 import { RadioButton } from "react-native-paper";
@@ -27,6 +29,8 @@ import { Context as AuthContext } from "../context/AuthContext";
 import { Context as OrderContext } from "../context/OrderContext";
 import { Context as ProductContext } from "../context/ProductContext";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
+import api from "../api/greenverse";
 
 const ConfirmCheckoutScreen = ({ route, navigation }) => {
   const today = new Date(Date.now());
@@ -40,8 +44,12 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
     city,
     number,
   } = route.params;
+  const [paymentLoading, setLoading] = useState(false);
+
+  const [cardDetails, setCardDetails] = useState();
+  const { confirmPayment, loading } = useConfirmPayment();
   const {
-    state: { imageUri, userId },
+    state: { imageUri, userId, email },
   } = useContext(AuthContext);
   const { placeOrder } = useContext(OrderContext);
   const {
@@ -55,7 +63,7 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
       ids = [...ids, item.id];
     });
 
-    // console.log(ids);
+    console.log(userId);
     placeOrder(
       {
         userId: userId,
@@ -74,6 +82,64 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
     setCartFromLocal({ cart: [] });
   };
 
+  const fetchPaymentIntentClientSecret = async () => {
+    const response = await api.post("/create-payment-intent", {
+      amount: Math.round((totalBill / 176) * 100),
+    });
+    const { clientSecret, error } = response.data;
+
+    return { clientSecret, error };
+  };
+
+  const handlePayPress = async () => {
+    setLoading(true);
+    //1.Gather the customer's billing information (e.g., email)
+    if (!cardDetails?.complete || !email) {
+      setLoading(false);
+      Alert.alert("Please enter Complete card details and Email");
+      return;
+    }
+    const billingDetails = {
+      email: email,
+    };
+    console.log(billingDetails);
+    //2.Fetch the intent client secret from the backend
+    try {
+      const { clientSecret, error } = await fetchPaymentIntentClientSecret();
+
+      //2. confirm the payment
+      if (error) {
+        setLoading(false);
+        alert("Unable to process payment");
+      } else {
+        const confirmResponse = await confirmPayment(clientSecret, {
+          type: "Card",
+          billingDetails: billingDetails,
+        });
+        console.log(confirmResponse);
+        const { paymentIntent, error } = confirmResponse;
+        if (error) {
+          setLoading(false);
+          alert(`Payment Confirmation Error ${error.message}`);
+        } else if (paymentIntent) {
+          setLoading(false);
+          Alert.alert("Transaction Alert", "Payment Successful", [
+            {
+              text: "OK",
+              onPress: () => {
+                console.log("Payment successful ", paymentIntent);
+                handlePlaceOrder();
+              },
+            },
+          ]);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    //3.Confirm the payment with the card details
+  };
+
   return (
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
@@ -84,11 +150,14 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
           <FontAwesome5 name="home" size={30} color={theme.colors.primary} />
         </Button>
       </Block>
+      {paymentLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : null}
       <Block flex={false} column style={styles.form}>
         <Block flex={false} row center space="between" margin={[0, 0, 10, 0]}>
           <Block flex={1.5}>
             <Text left primary>
-              Total Billllll:
+              Total Bill:
             </Text>
           </Block>
           <Block flex={7}>
@@ -101,7 +170,7 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
         <Block flex={false} row center space="between">
           <Block flex={1.5}>
             <Text left primary>
-              Donation Method:
+              Payment Method:
             </Text>
           </Block>
           <Block row flex={7}>
@@ -111,21 +180,20 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
           </Block>
         </Block>
 
-        {cardNumber === "" ? null : (
+        {method !== "Debit Card" ? null : (
           <>
             <Divider margin={[theme.sizes.base, theme.sizes.base]} />
-            <Block flex={false} row center space="between">
-              <Block flex={1.5}>
-                <Text left primary>
-                  Card Number:
-                </Text>
-              </Block>
-              <Block flex={7}>
-                <Text h3 bold primary>
-                  {cardNumber}
-                </Text>
-              </Block>
-            </Block>
+            <CardField
+              postalCodeEnabled={false}
+              placeholder={{
+                number: "4242 4242 4242 4242",
+              }}
+              cardStyle={styles.card}
+              style={styles.cardContainer}
+              onCardChange={(cardDetails) => {
+                setCardDetails(cardDetails);
+              }}
+            />
           </>
         )}
 
@@ -209,7 +277,8 @@ const ConfirmCheckoutScreen = ({ route, navigation }) => {
             <Button
               style={{ width: width * 0.4 }}
               color={theme.colors.primary}
-              onPress={handlePlaceOrder}
+              disabled={loading}
+              onPress={handlePayPress}
             >
               <Text h3 center white bold>
                 Confirm Order
@@ -242,5 +311,12 @@ const styles = StyleSheet.create({
     width: width * 0.7,
   },
   image: { width: 35, height: 35, borderRadius: 50 },
+  card: {
+    backgroundColor: "#efefefef",
+  },
+  cardContainer: {
+    height: 50,
+    marginVertical: 30,
+  },
 });
 export default ConfirmCheckoutScreen;

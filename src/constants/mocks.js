@@ -45,15 +45,15 @@ const volunteerCategories = [
       "Join others in cleaning up the streets and parks for a safe environment.",
     image: require("../../assets/icons/recycle.png"),
   },
-  {
-    id: 3,
-    name: "Teach.",
-    tags: ["products", "inspirations"],
-    count: 68,
-    description:
-      "Teach at one of our partner charity schools to give these a bright future",
-    image: require("../../assets/icons/teach.png"),
-  },
+  // {
+  //   id: 3,
+  //   name: "Teach.",
+  //   tags: ["products", "inspirations"],
+  //   count: 68,
+  //   description:
+  //     "Teach at one of our partner charity schools to give these a bright future",
+  //   image: require("../../assets/icons/teach.png"),
+  // },
 ];
 
 const tasks = [

@@ -35,7 +35,7 @@ const VolunteerListScreen = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [selectedTime, setSelectedTime] = useState("from-time");
   const {
-    state: { imageUri, name },
+    state: { imageUri, userId },
   } = useContext(AuthContext);
   const { createTask } = useContext(TaskContext);
 
@@ -287,7 +287,7 @@ const VolunteerListScreen = ({ navigation }) => {
                 onPress={() =>
                   createTask(
                     {
-                      manager: name,
+                      manager: userId,
                       taskName,
                       campaign,
                       location,

@@ -24,7 +24,7 @@ const CartScreen = ({ navigation }) => {
   const [totalBill, setTotalBill] = useState(0);
   useEffect(() => {
     let total = 0;
-    if (state.cart) {
+    if (state.cart && state.cart.length > 0) {
       state.cart.forEach((item) => {
         total = total + parseInt(item.quantity) * parseInt(item.price);
         console.log(total);
@@ -124,7 +124,7 @@ const CartScreen = ({ navigation }) => {
                 </Card>
               </Block>
             ))}
-          {state.cart ? (
+          {state.cart && state.cart.length > 0 ? (
             <Block center middle row>
               <Text h2 bold style={{ width: width * 0.3 }}>
                 Total Payment:
@@ -143,7 +143,7 @@ const CartScreen = ({ navigation }) => {
           <Button
             style={styles.button}
             onPress={() => navigation.navigate("Checkout", { totalBill })}
-            disabled={!state.cart}
+            disabled={!state.cart || state.cart.length <= 0}
           >
             <Text h3 bold style={{ width: width * 0.17 }}>
               Checkout

@@ -63,4 +63,24 @@ router.get("/user/donations/:userId", async (req, res) => {
   }
 });
 
+router.patch("/donation/:donationId", async (req, res) => {
+  const { donationId } = req.params;
+  const { text } = req.body;
+  // console.log(userId);
+  try {
+    let donation = await Donation.findById(donationId);
+    let progress = donation.progress;
+    progress = [...progress, { text, createdAt: Date.now() }];
+    const result = await Donation.findByIdAndUpdate(
+      donationId,
+      { progress: progress },
+      { new: true }
+    );
+    res.send(result);
+  } catch (err) {
+    console.log(err);
+    return res.status(422).send(err);
+  }
+});
+
 module.exports = router;

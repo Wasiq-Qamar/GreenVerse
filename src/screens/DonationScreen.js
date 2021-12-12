@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import { FAB } from "react-native-elements";
 import { RadioButton } from "react-native-paper";
@@ -37,8 +38,9 @@ const DonationScreen = ({ route, navigation }) => {
   const [anonymous, setAnonymous] = useState(false);
   const { name } = route.params;
   const {
-    state: { imageUri },
+    state: { imageUri, email },
   } = useContext(AuthContext);
+
   return (
     <Block white>
       <Block flex={false} row center space="between" style={styles.header}>
@@ -74,14 +76,14 @@ const DonationScreen = ({ route, navigation }) => {
           </Block>
         </Block>
 
-        <Block flex={false} row center space="between">
+        {/* <Block flex={false} row center space="between">
           <Block flex={1.5}>
             <Text left primary>
               Donation Method:
             </Text>
           </Block>
           <Block row flex={7}>
-            {/* <Block row flex={3}>
+            <Block row flex={3}>
               <RadioButton
                 value="EasyPaisa"
                 status={method === "EasyPaisa" ? "checked" : "unchecked"}
@@ -91,7 +93,7 @@ const DonationScreen = ({ route, navigation }) => {
               <Block middle flex={false}>
                 <Text primary>EasyPaisa</Text>
               </Block>
-            </Block> */}
+            </Block>
             <Block row flex={3}>
               <RadioButton
                 value="Debit Card"
@@ -104,11 +106,11 @@ const DonationScreen = ({ route, navigation }) => {
               </Block>
             </Block>
           </Block>
-        </Block>
+        </Block> */}
 
-        {method === "Debit Card" ? (
-          <>
-            <Divider margin={[theme.sizes.base, theme.sizes.base]} />
+        {/* {method === "Debit Card" ? (
+          <> */}
+        {/* <Divider margin={[theme.sizes.base, theme.sizes.base]} />
             <Block flex={false} row center space="between">
               <Block flex={1.5}>
                 <Text left primary>
@@ -156,8 +158,18 @@ const DonationScreen = ({ route, navigation }) => {
                   number
                 />
               </Block>
-            </Block>
-          </>
+            </Block> */}
+        {/* <CardField
+          placeholder={{
+            number: "4242 4242 4242 4242",
+          }}
+          cardStyle={styles.card}
+          style={styles.cardContainer}
+          onCardChange={(cardDetails) => {
+            setCardDetails(cardDetails);
+          }}
+        /> */}
+        {/* </>
         ) : // ) : method === "EasyPaisa" ? (
         //   <Block flex={false} row center space="between">
         //     <Block flex={1.5}>
@@ -175,7 +187,7 @@ const DonationScreen = ({ route, navigation }) => {
         //       />
         //     </Block>
         //   </Block>
-        null}
+        null} */}
 
         <Divider margin={[theme.sizes.base, theme.sizes.base]} />
 
@@ -220,7 +232,7 @@ const DonationScreen = ({ route, navigation }) => {
             <Button
               style={{ width: width * 0.4 }}
               color={theme.colors.primary}
-              disabled={amount === "" || cardNumber === "" ? true : false}
+              disabled={amount === "" ? true : false}
               onPress={() =>
                 navigation.navigate("ConfirmDonation", {
                   amount,

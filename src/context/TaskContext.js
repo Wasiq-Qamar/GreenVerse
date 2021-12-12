@@ -40,6 +40,21 @@ const enlistInTask = (dispatch) => async (id, userId) => {
   }
 };
 
+const editTask =
+  (dispatch) =>
+  async ({ date, taskName, id }) => {
+    try {
+      const res = await greenverseApi.patch(`/task/${id}`, {
+        date,
+        taskName,
+      });
+      dispatch({ type: "update_task", payload: res.data });
+      // console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
 const assignJob =
   (dispatch) =>
   async ({ id, userId, job }) => {
@@ -55,6 +70,36 @@ const assignJob =
     }
   };
 
+const uploadTaskImage =
+  (dispatch) =>
+  async ({ id, userId, image }) => {
+    try {
+      const res = await greenverseApi.patch(`/task/${id}/image`, {
+        userId,
+        image,
+      });
+      dispatch({ type: "update_task", payload: res.data });
+      // console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+const addMessage =
+  (dispatch) =>
+  async ({ id, user, text }) => {
+    try {
+      const res = await greenverseApi.patch(`/task/${id}/message`, {
+        user,
+        text,
+      });
+      dispatch({ type: "update_task", payload: res.data });
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
 const removeFromTask =
   (dispatch) =>
   async ({ id, userId }) => {
@@ -63,7 +108,7 @@ const removeFromTask =
         userId,
       });
       dispatch({ type: "update_task", payload: res.data });
-      // console.log(res.data);
+      console.log(res.data);
     } catch (err) {
       console.log(err);
     }
@@ -152,6 +197,9 @@ export const { Context, Provider } = createDataContext(
     fetchMyTasks,
     assignJob,
     removeFromTask,
+    uploadTaskImage,
+    editTask,
+    addMessage,
   },
   { tasks: [], myTasks: [] }
 );

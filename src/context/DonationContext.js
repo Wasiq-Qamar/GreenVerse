@@ -6,7 +6,7 @@ const donationReducer = (state, action) => {
     case "add_donation":
       return { ...state, donations: [...state.donations, action.payload] };
     case "fetch_donations":
-      return { donations: [...action.payload] };
+      return { ...state, donations: [...action.payload] };
     default:
       return state;
   }

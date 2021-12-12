@@ -60,16 +60,18 @@ router.get("/orders", async (req, res) => {
 
 router.get("/user/orders/:userId", async (req, res) => {
   const { userId } = req.params;
+  console.log(userId);
 
   try {
-    let orders = await Order.find()
-      .populate({ path: "userId", select: "userName email contact" })
-      .populate({
-        path: "productId",
-        select: "productName productImg category price",
-      });
+    const response = await Order.find();
+    // .populate({ path: "userId", select: "userName email contact" })
+    // .populate({
+    //   path: "productId",
+    //   select: "productName productImg category price",
+    // });
+
+    let orders = response.filter((item) => item.userId == userId);
     console.log(orders);
-    orders = orders.filter((item) => item.userId._id == userId);
     res.send(orders);
   } catch (err) {
     console.log(err);

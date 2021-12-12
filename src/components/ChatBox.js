@@ -1,27 +1,84 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Dimensions,
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import NavLink from "./NavLink";
 import { Button, Block, Input, Text } from "./elements";
 import Spacer from "./Spacer";
+import io from "socket.io-client";
 import { theme, mocks } from "../constants";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("window");
 
+let socket;
+
 const ChatBox = (props) => {
+  const { id, userName, navigation, addMessage, messagesList } = props;
   const [msg, setMsg] = useState("");
-  const [messages, setMessages] = useState(props.messagesList);
+  // const [messages, setMessages] = useState(props.messagesList);
   const [visible, setVisible] = useState(true);
 
   const handlePress = () => {
     setMessages([...messages, { text: msg, user: "sufyan" }]);
     setMsg("");
+  };
+
+  const [chatUserName, setChatUserName] = useState("");
+  const [room, setRoom] = useState("");
+  const [users, setUsers] = useState("");
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState(messagesList);
+  const ENDPOINT = "https://greenverse-chat.herokuapp.com/";
+
+  useEffect(() => {
+    const disconnect = navigation.addListener("blur", () => {
+      socket.disconnect();
+    });
+
+    return disconnect;
+  }, [navigation]);
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+
+    setChatUserName(userName);
+    setRoom(id);
+    console.log("join room :", userName, id);
+
+    socket.emit("join", { name: userName, room: id }, (error) => {
+      if (error) {
+        Alert.alert(error);
+      }
+    });
+  }, [ENDPOINT]);
+
+  useEffect(() => {
+    socket.on("message", (message) => {
+      setMessages((messages) => [...messages, message]);
+    });
+
+    socket.on("roomData", ({ users }) => {
+      setUsers(users);
+    });
+  }, []);
+
+  const sendMessage = (e) => {
+    e.preventDefault();
+    console.log("message to send: ", message);
+    if (message) {
+      socket.emit("sendMessage", message, () => {
+        setMessage("");
+        addMessage({ id, user: userName, text: message });
+      });
+
+      console.log("message to send: ", message);
+    }
   };
 
   return (
@@ -47,15 +104,23 @@ const ChatBox = (props) => {
                   <Block
                     right
                     style={
-                      message.user === "sufyan"
+                      message.user.toLowerCase().trim() !==
+                      userName.toLowerCase().trim()
                         ? styles.leftContainer
                         : styles.rightContainer
                     }
                     key={index}
                   >
-                    {/* <Text style={styles.username}>{message.user}</Text> */}
+                    <Text style={styles.username}>
+                      {message.user.toLowerCase().trim()}
+                    </Text>
                     <Text
-                      style={message.user === "sufyan" ? null : styles.white}
+                      style={
+                        message.user.toLowerCase().trim() !==
+                        userName.toLowerCase().trim()
+                          ? null
+                          : styles.white
+                      }
                     >
                       {message.text}
                     </Text>
@@ -68,10 +133,10 @@ const ChatBox = (props) => {
             <TextInput
               placeholder="Type a Message"
               style={{ width: width * 0.8 }}
-              onChangeText={setMsg}
-              defaultValue={msg}
+              onChangeText={setMessage}
+              defaultValue={message}
             />
-            <TouchableOpacity onPress={handlePress}>
+            <TouchableOpacity onPress={sendMessage}>
               <Feather
                 name="send"
                 size={24}
@@ -114,20 +179,20 @@ const styles = StyleSheet.create({
   leftContainer: {
     alignSelf: "flex-start",
     width: width * 0.45,
-    paddingVertical: 15,
+    paddingVertical: 8,
     paddingHorizontal: 10,
     marginTop: 3,
     backgroundColor: theme.colors.accent,
-    borderRadius: 20,
+    borderRadius: 10,
   },
   rightContainer: {
     alignSelf: "flex-end",
     width: width * 0.45,
-    paddingVertical: 15,
+    paddingVertical: 8,
     paddingHorizontal: 10,
     marginTop: 3,
     backgroundColor: theme.colors.primary,
-    borderRadius: 20,
+    borderRadius: 10,
   },
   white: {
     color: theme.colors.white,
@@ -148,6 +213,8 @@ const styles = StyleSheet.create({
   username: {
     color: "#828282",
     fontSize: 12,
+    marginBottom: 3,
+    alignSelf: "flex-end",
   },
 });
 

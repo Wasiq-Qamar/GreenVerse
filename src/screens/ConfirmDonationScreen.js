@@ -7,6 +7,8 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { FAB } from "react-native-elements";
 import { RadioButton } from "react-native-paper";
@@ -27,11 +29,16 @@ import { Context as AuthContext } from "../context/AuthContext";
 import { Context as DonationContext } from "../context/DonationContext";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
+import api from "../api/greenverse";
 
 const VolunteerListScreen = ({ route, navigation }) => {
   const { amount, method, cardNumber, name, anonymous } = route.params;
+  const [cardDetails, setCardDetails] = useState();
+  const { confirmPayment, loading } = useConfirmPayment();
+  const [paymentLoading, setLoading] = useState(false);
   const {
-    state: { imageUri, userId },
+    state: { imageUri, email, userId },
   } = useContext(AuthContext);
   const { addDonation } = useContext(DonationContext);
 
@@ -40,13 +47,70 @@ const VolunteerListScreen = ({ route, navigation }) => {
       {
         organization: name,
         userId,
-        method,
+        method: "Debit Card",
         amount,
-        cardNumber,
+        cardNumber: cardDetails.last4,
         anonymous,
       },
       callback
     );
+  };
+
+  const fetchPaymentIntentClientSecret = async () => {
+    const response = await api.post("/create-payment-intent", {
+      amount: Math.round((amount / 176) * 100),
+    });
+    const { clientSecret, error } = response.data;
+
+    return { clientSecret, error };
+  };
+
+  const handlePayPress = async () => {
+    setLoading(true);
+    //1.Gather the customer's billing information (e.g., email)
+    if (!cardDetails?.complete || !email) {
+      setLoading(false);
+      Alert.alert("Please enter Complete card details and Email");
+      return;
+    }
+    const billingDetails = {
+      email: email,
+    };
+    //2.Fetch the intent client secret from the backend
+    try {
+      const { clientSecret, error } = await fetchPaymentIntentClientSecret();
+
+      //2. confirm the payment
+      if (error) {
+        alert("Unable to process payment");
+        setLoading(false);
+      } else {
+        const confirmResponse = await confirmPayment(clientSecret, {
+          type: "Card",
+          billingDetails: billingDetails,
+        });
+        const { paymentIntent, error } = confirmResponse;
+        if (error) {
+          setLoading(false);
+          alert(`Payment Confirmation Error ${error.message}`);
+        } else if (paymentIntent) {
+          setLoading(false);
+          Alert.alert("Transaction Alert", "Payment Successful", [
+            {
+              text: "OK",
+              onPress: () => {
+                console.log("Payment successful ", paymentIntent);
+                handleDonation();
+                navigation.navigate("DonateNgosList");
+              },
+            },
+          ]);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    //3.Confirm the payment with the card details
   };
 
   return (
@@ -66,6 +130,9 @@ const VolunteerListScreen = ({ route, navigation }) => {
           )}
         </Button>
       </Block>
+      {paymentLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : null}
       <Block flex={false} column style={styles.form}>
         <Spacer>
           <Block flex={false} row center space="between">
@@ -91,7 +158,7 @@ const VolunteerListScreen = ({ route, navigation }) => {
             </Block>
             <Block row flex={7}>
               <Text left primary h3>
-                {method}
+                Online Payment
               </Text>
             </Block>
           </Block>
@@ -100,7 +167,7 @@ const VolunteerListScreen = ({ route, navigation }) => {
         <Divider margin={[theme.sizes.base, theme.sizes.base]} />
 
         <Spacer>
-          {method === "Debit Card" ? (
+          {/* {method === "Debit Card" ? (
             <>
               <Block flex={false} row center space="between">
                 <Block flex={2.5}>
@@ -128,7 +195,18 @@ const VolunteerListScreen = ({ route, navigation }) => {
                 </Text>
               </Block>
             </Block>
-          ) : null}
+          ) : null} */}
+          <CardField
+            postalCodeEnabled={false}
+            placeholder={{
+              number: "4242 4242 4242 4242",
+            }}
+            cardStyle={styles.card}
+            style={styles.cardContainer}
+            onCardChange={(cardDetails) => {
+              setCardDetails(cardDetails);
+            }}
+          />
         </Spacer>
 
         <Divider margin={[theme.sizes.base, theme.sizes.base]} />
@@ -171,9 +249,8 @@ const VolunteerListScreen = ({ route, navigation }) => {
             <Button
               style={{ width: width * 0.5 }}
               color={theme.colors.primary}
-              onPress={() =>
-                handleDonation(() => navigation.navigate("DonateNgosList"))
-              }
+              disabled={loading}
+              onPress={handlePayPress}
             >
               <Text h3 center white bold>
                 Confirm Transaction
@@ -206,5 +283,12 @@ const styles = StyleSheet.create({
     width: width * 0.7,
   },
   image: { width: 35, height: 35, borderRadius: 50 },
+  card: {
+    backgroundColor: "#efefefef",
+  },
+  cardContainer: {
+    height: 50,
+    marginVertical: 30,
+  },
 });
 export default VolunteerListScreen;

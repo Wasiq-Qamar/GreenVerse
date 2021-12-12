@@ -9,8 +9,9 @@ import {
 import { FAB } from "react-native-elements";
 
 import { Card, Badge, Button, Block, Text } from "../components/elements";
+import Spacer from "../components/Spacer";
 import { theme, mocks } from "../constants";
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
 import { Context as ProductContext } from "../context/ProductContext";
 import { FontAwesome5, AntDesign } from "@expo/vector-icons";
@@ -61,7 +62,9 @@ const VolunteerListScreen = ({ navigation }) => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{ paddingVertical: theme.sizes.base * 2 }}
+        style={{
+          paddingVertical: theme.sizes.base * 2,
+        }}
       >
         <Block flex={false} column space="between" style={styles.categories}>
           {categories.map((category, index) => (
@@ -104,13 +107,19 @@ const VolunteerListScreen = ({ navigation }) => {
           <Block
             bottom
             flex={1}
-            style={{ alignItems: "flex-end" }}
+            style={styles.createButton}
             padding={[0, width * 0.05]}
           >
             <FAB
               color={theme.colors.primary}
               icon={<AntDesign name="plus" size={24} color="white" />}
               onPress={() => navigation.navigate("TaskCreate")}
+              style={{ marginBottom: 10 }}
+            />
+            <FAB
+              color={theme.colors.primary}
+              icon={<FontAwesome5 name="robot" size={24} color="white" />}
+              onPress={() => navigation.navigate("Helper")}
             />
           </Block>
         ) : null}
@@ -133,6 +142,11 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     paddingHorizontal: theme.sizes.base * 2,
     marginBottom: theme.sizes.base * 3.5,
+    alignItems: "flex-start",
+  },
+  createButton: {
+    alignSelf: "flex-end",
+    paddingTop: 100,
   },
   category: {
     minWidth: (width - theme.sizes.padding * 2.4 - theme.sizes.base) / 3,

@@ -14,31 +14,29 @@ import { Context as AuthContext } from "../context/AuthContext";
 import { Context as TaskContext } from "../context/TaskContext";
 
 const DonationChannelScreen = ({ route, navigation }) => {
-  const { name, amount, date } = route.params;
+  const { name, amount, date, id, progress } = route.params;
   const {
-    state: { imageUri, email },
+    state: { imageUri, email, userName },
   } = useContext(AuthContext);
-  const { state } = useContext(TaskContext);
-  const users = ["Wasiq Qamar", "Sufyan Khan", "Other User", "Test User"];
 
-  const updates = [
-    {
-      time: "15-06-2021  12:45",
-      text: "Donation Recevied by organization",
-    },
-    {
-      time: "16-06-2021  10:06",
-      text: "Items bought with donation amount tobe donated",
-    },
-    {
-      time: "17-06-2021 10:33",
-      text: "Donation Items sent to Receiver",
-    },
-    {
-      time: "17-06-2021  16:24",
-      text: "Donation Items Delivered and Received",
-    },
-  ];
+  // const updates = [
+  //   {
+  //     time: "15-12-2021  12:45",
+  //     text: "Donation Recevied by organization",
+  //   },
+  //   {
+  //     time: "16-12-2021  10:12",
+  //     text: "Items bought with donation amount to be donated",
+  //   },
+  //   {
+  //     time: "17-12-2021 10:33",
+  //     text: "Donation Items sent to Receiver",
+  //   },
+  //   {
+  //     time: "17-12-2021  16:24",
+  //     text: "Donation Items Delivered and Received",
+  //   },
+  // ];
 
   return (
     <Block white>
@@ -85,23 +83,38 @@ const DonationChannelScreen = ({ route, navigation }) => {
               <Text h2 bold>
                 Donation Progress
               </Text>
-              {updates.map((update, index) => (
-                <Block key={index}>
-                  <Spacer>
-                    <Block row space="around" style={styles.updateContainer}>
-                      <Text style={{ width: width * 0.2 }}>{update.time}</Text>
-                      <Text style={{ width: width * 0.1 }}>|</Text>
-                      <Text style={{ width: width * 0.5 }}>{update.text}</Text>
-                    </Block>
-                  </Spacer>
-                </Block>
-              ))}
+              {progress.length > 0 ? (
+                progress.map((update, index) => (
+                  <Block key={index}>
+                    <Spacer>
+                      <Block row space="around" style={styles.updateContainer}>
+                        <Text style={{ width: width * 0.2, marginRight: 5 }}>
+                          {update.createdAt.split("T")[0]}{" "}
+                          {update.createdAt.split("T")[1].split(".")[0]}
+                        </Text>
+
+                        <Text
+                          style={{
+                            width: width * 0.5,
+                            borderLeftColor: theme.colors.primary,
+                            borderLeftWidth: 2,
+                            paddingHorizontal: 15,
+                          }}
+                        >
+                          {update.text}
+                        </Text>
+                      </Block>
+                    </Spacer>
+                  </Block>
+                ))
+              ) : (
+                <Text h4 middle center style={{ marginTop: 30 }}>
+                  No Updates Yet
+                </Text>
+              )}
             </Block>
           </Block>
         </Block>
-        <>
-          <ChatBox messagesList={mocks.donationMessages} />
-        </>
       </ScrollView>
     </Block>
   );

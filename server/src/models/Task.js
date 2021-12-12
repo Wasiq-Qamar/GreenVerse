@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const taskSchema = new mongoose.Schema({
   manager: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+    ref: "User",
   },
   taskName: {
     type: String,
@@ -31,11 +31,17 @@ const taskSchema = new mongoose.Schema({
   },
   peopleEnlisted: [
     {
-      user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
-      progress: {type: Number, default: 0},
-      jobAssigned: {type: String, default: 'Nothing Yet'},
-      jobImage: {type: String, default: ''}
-    }
+      user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      progress: { type: Number, default: 0 },
+      jobAssigned: { type: String, default: "Nothing Yet" },
+      jobImage: { type: String, default: "" },
+    },
+  ],
+  messages: [
+    {
+      user: String,
+      text: String,
+    },
   ],
 });
 

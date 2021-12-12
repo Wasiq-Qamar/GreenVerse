@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { Dimensions, Image, StyleSheet, ScrollView } from "react-native";
+import React, { useContext, useState, useEffect } from "react";
+import { Dimensions, Image, StyleSheet, ScrollView, Alert } from "react-native";
 import { LinearProgress } from "react-native-elements";
 import {
   Badge,
@@ -33,8 +33,11 @@ const TaskChannelScreen = ({ route, navigation }) => {
     fromTime,
     toTime,
     peopleNeeded,
+    taskName,
+    messages,
   } = route.params;
-  const [name, setName] = useState(route.params.name);
+
+  const [name, setName] = useState(route.params.taskName);
   const [date, setDate] = useState(route.params.date);
   const [peopleEnlisted, setPeopleEnlisted] = useState(
     route.params.peopleEnlisted
@@ -42,16 +45,21 @@ const TaskChannelScreen = ({ route, navigation }) => {
   const [selectedUser, setSelectedUser] = useState("");
 
   const {
-    state: { imageUri, email, userId },
+    state: { imageUri, email, userId, userName, userType },
   } = useContext(AuthContext);
-  const { state, assignJob, removeFromTask } = useContext(TaskContext);
+  const { state, assignJob, removeFromTask, editTask, addMessage } =
+    useContext(TaskContext);
 
   const [changePicture, setChangePicture] = useState(false);
   const [image, setImage] = useState(null);
   const [jobText, setJobText] = useState("");
 
   const [showAlertJob, setShowAlertJob] = useState(false);
+  const [showAlertViewJob, setShowAlertViewJob] = useState(false);
+  const [currentJob, setCurrentJob] = useState(false);
   const [showAlertImage, setShowAlertImage] = useState(false);
+  const [showAlertViewImage, setShowAlertViewImage] = useState(false);
+  const [currentImage, setCurrentImage] = useState(false);
   const [showAlertUser, setShowAlertUser] = useState(false);
   const [showAlertEdit, setShowAlertEdit] = useState(false);
 
@@ -67,6 +75,10 @@ const TaskChannelScreen = ({ route, navigation }) => {
     setPeopleEnlisted(filteredUsers);
     setShowAlertUser(!showAlertUser);
     removeFromTask({ id: taskId, userId: selectedUser });
+  };
+
+  const handleEditTask = () => {
+    editTask({ id: taskId, date, taskName: name });
   };
 
   return (
@@ -112,7 +124,7 @@ const TaskChannelScreen = ({ route, navigation }) => {
                   />
                 )}
               </Badge>
-              <Block column flex={false} style={{ marginTop: -12 }}>
+              <Block column flex={false} style={{ marginBottom: 15 }}>
                 <Text h2 bold primary style={{ width: width / 2 }}>
                   {name}
                 </Text>
@@ -185,8 +197,8 @@ const TaskChannelScreen = ({ route, navigation }) => {
                           </Text>
                         </Block>
                         <LinearProgress
-                          color="primary"
-                          value={item.progress}
+                          color={theme.colors.accent}
+                          value={item.jobImage ? 100 : 10}
                           variant="determinate"
                           style={styles.progress}
                         />
@@ -195,7 +207,14 @@ const TaskChannelScreen = ({ route, navigation }) => {
                       <Button
                         style={[styles.userButtons, { marginTop: -15 }]}
                         color={theme.colors.primary}
-                        onPress={() => setShowAlertJob(!showAlertJob)}
+                        onPress={
+                          userType !== "Manager"
+                            ? () => {
+                                setCurrentJob(item.jobAssigned);
+                                setShowAlertViewJob(!showAlertViewJob);
+                              }
+                            : () => setShowAlertJob(!showAlertJob)
+                        }
                       >
                         <Text h4 white center>
                           <MaterialIcons
@@ -205,31 +224,55 @@ const TaskChannelScreen = ({ route, navigation }) => {
                           />
                         </Text>
                       </Button>
+                      {/* {userType === "Manager" ? (
+                        <Button
+                          style={[styles.userButtons, { marginTop: -15 }]}
+                          color={theme.colors.primary}
+                          onPress={() => {
+                            setCurrentImage(item.jobImage);
+                            setShowAlertViewImage(!showAlertViewImage);
+                          }}
+                        >
+                          <Text h4 white center>
+                            <Entypo name="image" size={20} color="white" />
+                          </Text>
+                        </Button>
+                      ) : ( */}
                       <Button
                         style={[styles.userButtons, { marginTop: -15 }]}
                         color={theme.colors.primary}
-                        onPress={() => setShowAlertImage(!showAlertImage)}
+                        onPress={
+                          item.user._id === userId
+                            ? () => setShowAlertImage(!showAlertImage)
+                            : () => {
+                                setCurrentImage(item.jobImage);
+                                setShowAlertViewImage(!showAlertViewImage);
+                              }
+                        }
                       >
                         <Text h4 white center>
                           <Entypo name="image" size={20} color="white" />
                         </Text>
                       </Button>
-                      <Button
-                        style={[styles.userButtons, { marginTop: -15 }]}
-                        color={theme.colors.primary}
-                        onPress={() => {
-                          setSelectedUser(item.user._id);
-                          setShowAlertUser(!showAlertUser);
-                        }}
-                      >
-                        <Text h4 white center style>
-                          <AntDesign
-                            name="deleteuser"
-                            size={20}
-                            color="white"
-                          />
-                        </Text>
-                      </Button>
+                      {/* )} */}
+                      {userType === "Manager" ? (
+                        <Button
+                          style={[styles.userButtons, { marginTop: -15 }]}
+                          color={theme.colors.primary}
+                          onPress={() => {
+                            setSelectedUser(item.user._id);
+                            setShowAlertUser(!showAlertUser);
+                          }}
+                        >
+                          <Text h4 white center style>
+                            <AntDesign
+                              name="deleteuser"
+                              size={20}
+                              color="white"
+                            />
+                          </Text>
+                        </Button>
+                      ) : null}
                     </Block>
                     <Divider />
                   </Block>
@@ -239,7 +282,13 @@ const TaskChannelScreen = ({ route, navigation }) => {
           </Block>
         </Block>
         <>
-          <ChatBox messagesList={mocks.taskMessages} />
+          <ChatBox
+            messagesList={messages}
+            id={taskId}
+            userName={userName}
+            navigation={navigation}
+            addMessage={addMessage}
+          />
         </>
       </ScrollView>
 
@@ -272,6 +321,27 @@ const TaskChannelScreen = ({ route, navigation }) => {
         contentContainerStyle={{ width: width * 0.8 }}
       />
 
+      {/* JOB VIEW MODAL */}
+      <AwesomeAlert
+        show={showAlertViewJob}
+        showProgress={false}
+        title="Assigned Task"
+        customView={
+          <>
+            <Text>{currentJob}</Text>
+          </>
+        }
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        confirmText="Ok"
+        confirmButtonColor={theme.colors.accent}
+        cancelButtonColor="#ff0e0e"
+        onConfirmPressed={() => setShowAlertViewJob(!showAlertViewJob)}
+        contentContainerStyle={{ width: width * 0.8 }}
+      />
+
       {/* IMAGE UPLOAD MODAL */}
       <AwesomeAlert
         show={showAlertImage}
@@ -300,6 +370,36 @@ const TaskChannelScreen = ({ route, navigation }) => {
         }}
         onConfirmPressed={() => {
           setShowAlertImage(!showAlertImage);
+        }}
+        contentContainerStyle={{ width: width * 0.8 }}
+      />
+
+      {/* IMAGE VIEW MODAL */}
+      <AwesomeAlert
+        show={showAlertViewImage}
+        showProgress={false}
+        title="User Task Image"
+        customView={
+          <>
+            {currentImage ? (
+              <Image source={{ uri: currentImage }} style={styles.modalImage} />
+            ) : (
+              <Image
+                source={require("../../assets/blank-image.png")}
+                style={styles.modalImage}
+              />
+            )}
+          </>
+        }
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        confirmText="OK"
+        confirmButtonColor={theme.colors.accent}
+        cancelButtonColor="#ff0e0e"
+        onConfirmPressed={() => {
+          setShowAlertViewImage(!showAlertViewImage);
         }}
         contentContainerStyle={{ width: width * 0.8 }}
       />
@@ -356,7 +456,7 @@ const TaskChannelScreen = ({ route, navigation }) => {
           setShowAlertEdit(!showAlertEdit);
         }}
         onConfirmPressed={() => {
-          setUsers(users.filter((user) => user !== "Wasiq Qamar"));
+          handleEditTask();
           setShowAlertEdit(!showAlertEdit);
         }}
         contentContainerStyle={{ width: width * 0.8 }}
@@ -367,6 +467,7 @@ const TaskChannelScreen = ({ route, navigation }) => {
         setImage={setImage}
         setChangePicture={setChangePicture}
         changePicture={changePicture}
+        taskId={taskId}
       />
     </Block>
   );
@@ -416,6 +517,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: theme.colors.primary,
     alignItems: "center",
+  },
+  modalImage: {
+    width: 100,
+    height: 100,
   },
 });
 export default TaskChannelScreen;

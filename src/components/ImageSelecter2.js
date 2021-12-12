@@ -5,6 +5,7 @@ import { theme } from "../constants";
 
 import * as ImagePicker from "expo-image-picker";
 import { Context as AuthContext } from "../context/AuthContext";
+import { Context as TaskContext } from "../context/TaskContext";
 // import { styles } from "./elements/Block";
 const { width, height } = Dimensions.get("window");
 
@@ -13,11 +14,13 @@ const ImageSelecter2 = ({
   setImage,
   changePicture,
   setChangePicture,
+  taskId,
 }) => {
   const {
     state: { imageUri, userId },
     uploadImage,
   } = useContext(AuthContext);
+  const { uploadTaskImage } = useContext(TaskContext);
   useEffect(() => {
     (async () => {
       if (Platform.OS !== "web") {
@@ -65,7 +68,7 @@ const ImageSelecter2 = ({
       .then((data) => {
         imageUrl = data.url;
       })
-      .then(() => console.log(imageUrl, userId));
+      .then(() => uploadTaskImage({ id: taskId, image: imageUrl, userId }));
   };
 
   const ButtonAlert = () =>
@@ -116,7 +119,7 @@ const ImageSelecter2 = ({
             <Button
               style={{ width: width * 0.4 }}
               color="#8B0000"
-              onPress={() => uploadImage("", userId)}
+              onPress={() => uploadTaskImage({ id: taskId, image: "", userId })}
             >
               <Text bold white center>
                 Remove Image

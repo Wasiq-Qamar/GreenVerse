@@ -1,6 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StripeProvider } from "@stripe/stripe-react-native";
+import { LogBox } from "react-native";
+
 import { theme } from "./src/constants";
 //  NAVIGATION
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
@@ -32,6 +35,7 @@ import ProductDescriptionScreen from "./src/screens/ProductDescriptionScreen";
 import CheckoutScreen from "./src/screens/CheckoutScreen";
 import ConfirmCheckoutScreen from "./src/screens/ConfirmCheckoutScreen";
 import ManageOrdersScreen from "./src/screens/ManageOrdersScreen";
+import YourHelper from "./src/screens/YourHelper";
 
 //  CONTEXT
 import { Provider as AuthProvider } from "./src/context/AuthContext";
@@ -47,6 +51,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+LogBox.ignoreLogs(["Remote debugger"]);
 
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -84,6 +89,7 @@ const TaskLists = () => {
       <Stack.Screen name="TasksList" component={TasksListScreen} />
       <Stack.Screen name="TaskDetails" component={TaskDetailsScreen} />
       <Stack.Screen name="TaskCreate" component={TaskCreateScreen} />
+      <Stack.Screen name="Helper" component={YourHelper} />
     </Stack.Navigator>
   );
 };
@@ -125,7 +131,7 @@ const Home = () => {
     <BottomTab.Navigator
       tabBarOptions={{
         labelStyle: { fontSize: 12, paddingBottom: 10 },
-        style: { minHeight: 55, paddingTop: 10 },
+        style: { minHeight: 55, paddingTop: 5 },
         activeTintColor: theme.colors.primary,
         inactiveTintColor: theme.colors.gray,
       }}
@@ -298,16 +304,18 @@ function App() {
 
 export default () => {
   return (
-    <OrderProvider>
-      <ProductProvider>
-        <DonationProvider>
-          <TaskProvider>
-            <AuthProvider>
-              <App />
-            </AuthProvider>
-          </TaskProvider>
-        </DonationProvider>
-      </ProductProvider>
-    </OrderProvider>
+    <StripeProvider publishableKey="pk_test_51Jyy7lEK24e61J3099ffTNmyOFfmxyk2WKyeZI8jrza4U1lcrw3nC1JjxElNjzULcYeWpFuY2wanM1J5sDVtJAUb00S3hlV0yZ">
+      <OrderProvider>
+        <ProductProvider>
+          <DonationProvider>
+            <TaskProvider>
+              <AuthProvider>
+                <App />
+              </AuthProvider>
+            </TaskProvider>
+          </DonationProvider>
+        </ProductProvider>
+      </OrderProvider>
+    </StripeProvider>
   );
 };

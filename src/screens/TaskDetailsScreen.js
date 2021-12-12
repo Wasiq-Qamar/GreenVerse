@@ -15,7 +15,7 @@ const TaskDetailsScreen = ({ route, navigation }) => {
   const [showAlert, setShowAlert] = useState(false);
 
   const {
-    state: { imageUri, email, userId },
+    state: { imageUri, email, userId, userName },
   } = useContext(AuthContext);
   const { state, enlistInTask, deleteTask } = useContext(TaskContext);
 
@@ -73,22 +73,24 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                     )}
                   </Badge>
                   <Block column flex={false}>
-                    <Text h1 bold primary style={{ width: width / 3 }}>
+                    <Text h2 bold primary style={{ width: width / 2.2 }}>
                       {item.taskName}
                     </Text>
-                    <Text h3 bold primary style={{ width: width / 3 }}>
+                    <Text h3 bold primary style={{ width: width / 2.2 }}>
                       {item.location}
                     </Text>
                   </Block>
-                  <Block column flex={false}>
-                    <Button
-                      style={styles.topButtons}
-                      color="#800000"
-                      onPress={() => setShowAlert(true)}
-                    >
-                      <AntDesign name="delete" size={24} color="white" />
-                    </Button>
-                  </Block>
+                  {item.manager._id === userId ? (
+                    <Block column flex={false}>
+                      <Button
+                        style={styles.topButtons}
+                        color="#800000"
+                        onPress={() => setShowAlert(true)}
+                      >
+                        <AntDesign name="delete" size={24} color="white" />
+                      </Button>
+                    </Block>
+                  ) : null}
                 </Block>
                 {item.campaign === "garbageRecycling" ? null : (
                   <Block row flex={false} padding={[20, 0]}>
