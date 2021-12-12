@@ -42,11 +42,12 @@ const enlistInTask = (dispatch) => async (id, userId) => {
 
 const editTask =
   (dispatch) =>
-  async ({ date, taskName, id }) => {
+  async ({ date, taskName, peopleNeeded, id }) => {
     try {
       const res = await greenverseApi.patch(`/task/${id}`, {
         date,
         taskName,
+        peopleNeeded,
       });
       dispatch({ type: "update_task", payload: res.data });
       // console.log(res.data);

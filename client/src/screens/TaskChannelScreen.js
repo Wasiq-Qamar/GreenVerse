@@ -17,9 +17,10 @@ import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import AwesomeAlert from "react-native-awesome-alerts";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { theme, mocks } from "../constants";
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 import { Context as AuthContext } from "../context/AuthContext";
 import { Context as TaskContext } from "../context/TaskContext";
 
@@ -39,6 +40,7 @@ const TaskChannelScreen = ({ route, navigation }) => {
 
   const [name, setName] = useState(route.params.taskName);
   const [date, setDate] = useState(route.params.date);
+  const [people, setPeople] = useState(route.params.peopleNeeded);
   const [peopleEnlisted, setPeopleEnlisted] = useState(
     route.params.peopleEnlisted
   );
@@ -135,22 +137,26 @@ const TaskChannelScreen = ({ route, navigation }) => {
                   {manager}
                 </Text>
               </Block>
-              <Block row style={{ marginLeft: -10 }}>
-                <Button
-                  style={styles.topButtons}
-                  color={theme.colors.accent}
-                  onPress={() => setShowAlertEdit(!showAlertEdit)}
-                >
-                  <Text h4 white center>
-                    <Feather name="edit" size={28} color="black" />
-                  </Text>
-                </Button>
-                <Button style={styles.topButtons} color={theme.colors.accent}>
-                  <Text h4 white center>
-                    <AntDesign name="shoppingcart" size={28} color="black" />
-                  </Text>
-                </Button>
-              </Block>
+
+              {userType === "Manager" ? (
+                <Block row style={{ marginLeft: -10 }}>
+                  <Button
+                    style={styles.topButtons}
+                    color={theme.colors.accent}
+                    onPress={() => setShowAlertEdit(!showAlertEdit)}
+                  >
+                    <Text h4 white center>
+                      <Feather name="edit" size={28} color="black" />
+                    </Text>
+                  </Button>
+
+                  <Button style={styles.topButtons} color={theme.colors.accent}>
+                    <Text h4 white center>
+                      <AntDesign name="shoppingcart" size={28} color="black" />
+                    </Text>
+                  </Button>
+                </Block>
+              ) : null}
             </Block>
             <Block flex={false}>
               <Text h3 bold>
@@ -436,18 +442,35 @@ const TaskChannelScreen = ({ route, navigation }) => {
               defaultValue={name}
               style={{ width: width * 0.7, paddingHorizontal: 15 }}
               onChangeText={setName}
+              placeholder="Name of task"
+            />
+            <Input
+              defaultValue={people}
+              style={{ width: width * 0.7, paddingHorizontal: 15 }}
+              onChangeText={setPeople}
+              placeholder="No. of people needed for task"
+              number
             />
             <Input
               defaultValue={date}
-              style={{ width: width * 0.7, paddingHorizontal: 15 }}
+              style={{
+                width: width * 0.7,
+                paddingHorizontal: 15,
+              }}
               onChangeText={setDate}
+              placeholder="Date"
+              number
             />
           </>
         }
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={false}
         showCancelButton={true}
-        showConfirmButton={true}
+        showConfirmButton={
+          name.length > 0 &&
+          parseInt(people) >= peopleEnlisted.length &&
+          date.length == 8
+        }
         cancelText="Cancel"
         confirmText="Update"
         cancelButtonColor="#ff0e0e"
@@ -459,7 +482,7 @@ const TaskChannelScreen = ({ route, navigation }) => {
           handleEditTask();
           setShowAlertEdit(!showAlertEdit);
         }}
-        contentContainerStyle={{ width: width * 0.8 }}
+        contentContainerStyle={{ width: width * 0.8, height: height * 0.4 }}
       />
 
       <ImageSelecter2

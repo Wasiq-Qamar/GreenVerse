@@ -318,6 +318,7 @@ const VolunteerListScreen = ({ navigation }) => {
           is24Hour={true}
           display="default"
           onChange={onChange}
+          minimumDate={new Date(Date.now())}
         />
       )}
     </Block>

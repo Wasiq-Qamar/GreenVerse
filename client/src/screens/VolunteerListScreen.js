@@ -103,26 +103,27 @@ const VolunteerListScreen = ({ navigation }) => {
             </Block>
           ))}
         </Block>
-        {userType === "Manager" ? (
-          <Block
-            bottom
-            flex={1}
-            style={styles.createButton}
-            padding={[0, width * 0.05]}
-          >
+
+        <Block
+          bottom
+          flex={1}
+          style={styles.createButton}
+          padding={[0, width * 0.05]}
+        >
+          {userType === "Manager" ? (
             <FAB
               color={theme.colors.primary}
               icon={<AntDesign name="plus" size={24} color="white" />}
               onPress={() => navigation.navigate("TaskCreate")}
               style={{ marginBottom: 10 }}
             />
-            <FAB
-              color={theme.colors.primary}
-              icon={<FontAwesome5 name="robot" size={24} color="white" />}
-              onPress={() => navigation.navigate("Helper")}
-            />
-          </Block>
-        ) : null}
+          ) : null}
+          <FAB
+            color={theme.colors.primary}
+            icon={<FontAwesome5 name="robot" size={24} color="white" />}
+            onPress={() => navigation.navigate("Helper")}
+          />
+        </Block>
       </ScrollView>
     </Block>
   );

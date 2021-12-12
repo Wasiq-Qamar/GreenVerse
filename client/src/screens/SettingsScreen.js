@@ -160,7 +160,9 @@ const SettingsScreen = ({ navigation }) => {
         <Block>
           <LinkContainer text="Manage Tasks" routeName="MyTasks" />
           <LinkContainer text="Manage Donations" routeName="MyDonations" />
-          <LinkContainer text="My Orders" routeName="MyOrders" />
+          {userType === "Manager" ? (
+            <LinkContainer text="My Orders" routeName="MyOrders" />
+          ) : null}
         </Block>
       </ScrollView>
 
